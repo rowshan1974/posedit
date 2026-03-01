@@ -338,28 +338,167 @@
 
         /* --- NEW ADD-ON STYLES (2. Stock Alert) --- */
          .stock-alert-card {
-            border-left: 5px solid #ef4444; /* Red for alerts */
-            background: #401014;
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.12) 0%, rgba(217, 119, 6, 0.08) 100%);
             color: #e5e7eb;
-            padding: 15px;
-            margin-top: 10px;
-            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 16px;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            box-shadow: 0 6px 25px rgba(245, 158, 11, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stock-alert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b);
+            background-size: 200% 100%;
+            animation: gradientShiftAlert 3s linear infinite;
+        }
+        
+        @keyframes gradientShiftAlert {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
          .stock-alert-card h4 {
-            color: #fca5a5;
+            color: #fbbf24;
             margin-top: 0;
+            font-weight: 600;
+            font-size: 16px;
         }
          .stock-alert-card ul {
             list-style: none;
             padding-left: 0;
+            margin: 10px 0 0 0;
         }
          .stock-alert-card ul li {
-            padding: 5px 0;
-            border-bottom: 1px dotted #334155;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            background: rgba(0, 0, 0, 0.1);
+            margin-bottom: 8px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .stock-alert-card ul li:last-child {
+            border-bottom: none;
+        }
+         .stock-alert-card ul li:hover {
+            background: rgba(245, 158, 11, 0.15);
+            transform: translateX(5px);
         }
          .stock-alert-card .low-stock-product-name {
-            font-weight: 500;
-            color: #fca5a5;
+            font-weight: 600;
+            color: #fbbf24;
+            font-size: 15px;
+        }
+        .stock-alert-card .low-stock-quantity {
+            color: #f87171;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .alert-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-title h3 {
+            margin: 0;
+            color: #fbbf24;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .alert-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .minimize-alerts-btn, .clear-alerts-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+            min-width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .minimize-alerts-btn::before, .clear-alerts-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        .minimize-alerts-btn:hover::before, .clear-alerts-btn:hover::before {
+            left: 100%;
+        }
+        
+        .minimize-alerts-btn:hover, .clear-alerts-btn:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
+        }
+        
+        .minimize-alerts-btn:active, .clear-alerts-btn:active {
+            transform: translateY(-1px) scale(0.95);
+            box-shadow: 0 3px 8px rgba(245, 158, 11, 0.2);
+        }
+        
+        .minimize-alerts-btn i, .clear-alerts-btn i {
+            font-size: 16px;
+            margin: 0;
+        }
+        
+        /* Clear button variant */
+        .clear-alerts-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .clear-alerts-btn:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        .clear-alerts-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        }
+        
+        .minimized .alert-actions {
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .minimized #stock-alerts-list {
+            display: none;
+        }
+        
+        .minimized .alert-title h3 {
+            cursor: pointer;
         }
 
 
@@ -367,16 +506,17 @@
 
         /* Modern Login Container */
         #login-container {
-            max-width: 420px;
+            max-width: 450px;
             margin: 80px auto;
-            padding: 40px 35px;
+            padding: 50px 40px;
             background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(59, 130, 246, 0.1);
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.2);
             text-align: center;
-            border: 1px solid rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             position: relative;
             overflow: hidden;
+            animation: floatEffect 6s ease-in-out infinite;
         }
         #login-container::before {
             content: '';
@@ -384,52 +524,142 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            height: 6px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981);
+            background-size: 300% 100%;
+            animation: gradientShift 3s linear infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+        
+        @keyframes floatEffect {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         #login-form h2 {
             color: var(--text-light);
-            margin-bottom: 30px;
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            margin-bottom: 35px;
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+        #login-form h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 2px;
         }
 
         #login-form input[type="text"],
         #login-form input[type="password"] {
             width: 100%;
-            padding: 16px 20px;
-            margin-bottom: 18px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 14px;
-            font-size: 16px;
+            padding: 18px 24px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 16px;
+            font-size: 17px;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: var(--text-light);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #login-form input[type="text"]::before,
+        #login-form input[type="password"]::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+        #login-form input[type="text"]:focus::before,
+        #login-form input[type="password"]:focus::before {
+            left: 100%;
         }
         #login-form input[type="text"]:focus,
         #login-form input[type="password"]:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
         #login-form input::placeholder {
             color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+        #login-form input:focus::placeholder {
+            color: #94a3b8;
+            opacity: 0.8;
         }
 
         .error-message {
-            color: #ef4444;
-            margin-top: 15px;
-            font-size: 14px;
-            background: rgba(239, 68, 68, 0.1);
-            padding: 10px 15px;
-            border-radius: 10px;
-            border-left: 3px solid #ef4444;
+            color: #f87171;
+            margin-top: 20px;
+            font-size: 15px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(127, 29, 29, 0.1) 100%);
+            padding: 16px 22px;
+            border-radius: 16px;
+            border-left: 5px solid #ef4444;
+            font-weight: 500;
+            text-align: left;
+            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.15);
+            animation: shakeError 0.6s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .error-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: all 0.6s;
+        }
+        .error-message:hover::before {
+            transform: translateX(-100%);
+        }
+        
+        /* Success message variant */
+        .success-message {
+            color: #6ee7b7;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border-left: 5px solid #10b981;
+            animation: fadeInSuccess 0.5s ease-in;
+        }
+        
+        @keyframes fadeInSuccess {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
         }
         
         /* Modal styles */
@@ -1201,116 +1431,24 @@
 
         /* Modern Beautiful Button Styles */
         form button, .action-buttons button {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            margin-right: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        form button::before, .action-buttons button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        form button:hover::before, .action-buttons button:hover::before {
-            left: 100%;
-        }
-        form button:hover, .action-buttons button:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-        }
-        form button:active, .action-buttons button:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-        form button i, .action-buttons button i {
-            margin-right: 8px;
-            font-size: 14px;
-        }
-
-        .cancel-btn {
-            background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
-            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3) !important;
-        }
-        .cancel-btn:hover {
-            background: linear-gradient(135deg, #475569 0%, #334155 100%) !important;
-            box-shadow: 0 8px 25px rgba(100, 116, 139, 0.4) !important;
-        }
-
-        .danger-btn {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
-        }
-        .danger-btn:hover {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4) !important;
-        }
-        .edit-btn {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-            color: white !important;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3) !important;
-        }
-        .edit-btn:hover {
-            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
-            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4) !important;
-        }
-        .info-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
-        }
-        .info-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
-        }
-        .warning-btn {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3) !important;
-        }
-        .warning-btn:hover {
-            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
-            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4) !important;
-        }
-
-        .primary-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
-        }
-        .primary-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
-        }
-
-        /* POS Add to Cart Button - Special Style */
-        #pos-add-to-cart-btn {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
-            color: white;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
+            margin-right: 12px;
+            margin-bottom: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            white-space: nowrap;
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
             position: relative;
             overflow: hidden;
+            min-height: 48px;
         }
-        #pos-add-to-cart-btn::before {
+        form button::before, .action-buttons button::before {
             content: '';
             position: absolute;
             top: 0;
@@ -1320,38 +1458,308 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: left 0.5s;
         }
+        form button:hover::before, .action-buttons button:hover::before {
+            left: 100%;
+        }
+        form button:hover, .action-buttons button:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.6);
+        }
+        form button:active, .action-buttons button:active {
+            transform: translateY(-2px) scale(0.98);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        form button i, .action-buttons button i {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .cancel-btn {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(100, 116, 139, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .cancel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .cancel-btn:hover::before {
+            left: 100%;
+        }
+        .cancel-btn:hover {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(100, 116, 139, 0.6) !important;
+        }
+        .cancel-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(100, 116, 139, 0.4) !important;
+        }
+
+        .danger-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .danger-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .danger-btn:hover::before {
+            left: 100%;
+        }
+        .danger-btn:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.6) !important;
+        }
+        .danger-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+        }
+        .edit-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .edit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .edit-btn:hover::before {
+            left: 100%;
+        }
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.6) !important;
+        }
+        .edit-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+        }
+        .info-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .info-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .info-btn:hover::before {
+            left: 100%;
+        }
+        .info-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6) !important;
+        }
+        .info-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+        }
+        .warning-btn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .warning-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .warning-btn:hover::before {
+            left: 100%;
+        }
+        .warning-btn:hover {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.6) !important;
+        }
+        .warning-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4) !important;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+            color: white !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 14px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+            min-height: 48px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        .primary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .primary-btn:hover::before {
+            left: 100%;
+        }
+        .primary-btn:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6) !important;
+        }
+        .primary-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+        }
+
+        /* POS Add to Cart Button - Special Style */
+        #pos-add-to-cart-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+            position: relative;
+            overflow: hidden;
+            min-height: 56px;
+        }
+        #pos-add-to-cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+            transition: left 0.5s;
+        }
         #pos-add-to-cart-btn:hover::before {
             left: 100%;
         }
         #pos-add-to-cart-btn:hover {
             background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.7);
         }
         #pos-add-to-cart-btn:active {
-            transform: translateY(-1px) scale(0.98);
+            transform: translateY(-3px) scale(0.96);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
         }
         #pos-add-to-cart-btn i {
-            margin-right: 10px;
-            font-size: 18px;
+            margin-right: 12px;
+            font-size: 20px;
         }
 
         /* Complete Sale Button - Special Style */
         #complete-sale-btn {
             background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%) !important;
             color: white;
-            padding: 16px 32px;
+            padding: 20px 36px;
             border: none;
-            border-radius: 14px;
+            border-radius: 18px;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
             position: relative;
             overflow: hidden;
             width: 100%;
             max-width: 400px;
+            min-height: 64px;
         }
         #complete-sale-btn::before {
             content: '';
@@ -1360,7 +1768,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
             transition: left 0.5s;
         }
         #complete-sale-btn:hover::before {
@@ -1368,40 +1776,64 @@
         }
         #complete-sale-btn:hover {
             background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%) !important;
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 35px rgba(16, 185, 129, 0.5);
+            transform: translateY(-6px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.7);
         }
         #complete-sale-btn:active {
-            transform: translateY(-2px) scale(0.98);
+            transform: translateY(-4px) scale(0.96);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
         }
         #complete-sale-btn i {
-            margin-right: 12px;
-            font-size: 20px;
+            margin-right: 14px;
+            font-size: 22px;
         }
 
         /* Table Action Buttons - Compact Style */
         .table-action-buttons button {
-            padding: 8px 14px;
-            font-size: 13px;
-            border-radius: 8px;
-            margin-right: 6px;
+            padding: 12px 20px !important;
+            font-size: 14px !important;
+            border-radius: 12px !important;
+            margin-right: 8px !important;
+            margin-bottom: 8px !important;
+            min-height: 40px !important;
+        }
+        .table-action-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .table-action-buttons button:hover::before {
+            left: 100%;
+        }
+        .table-action-buttons button:hover {
+            transform: translateY(-3px) scale(1.05) !important;
+        }
+        .table-action-buttons button:active {
+            transform: translateY(-1px) scale(0.98) !important;
         }
 
         /* Login Button - Special Style */
         #login-form button {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
-            padding: 14px 20px;
+            padding: 20px 28px;
             border: none;
-            border-radius: 10px;
+            border-radius: 18px;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 19px;
+            font-weight: 700;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            min-height: 60px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
             position: relative;
             overflow: hidden;
+            letter-spacing: 0.5px;
         }
         #login-form button::before {
             content: '';
@@ -1410,19 +1842,24 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+            transition: left 0.7s;
         }
         #login-form button:hover::before {
             left: 100%;
         }
         #login-form button:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6);
         }
         #login-form button:active {
-            transform: translateY(-1px);
+            transform: translateY(-3px) scale(0.96);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        #login-form button i {
+            margin-right: 12px;
+            font-size: 20px;
         }
 
         /* Header Logout Button - Enhanced */
@@ -1668,25 +2105,472 @@
 
         /* Products Section Specific */
         #products-section .stock-report-section {
-            background: linear-gradient(145deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%) !important;
-            border: 1px solid rgba(139, 92, 246, 0.3) !important;
-            border-radius: 20px !important;
-            padding: 25px !important;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.12) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+            border: 1px solid rgba(139, 92, 246, 0.35) !important;
+            border-radius: 16px !important;
+            padding: 28px !important;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        #products-section .stock-report-section:hover {
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.25);
+            transform: translateY(-2px);
         }
         #products-section .stock-report-section h3 {
-            color: #a78bfa !important;
+            color: #7c3aed !important;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        #products-section .stock-report-section p {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+        
+        /* Enhanced Report Controls */
+        .report-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .date-range-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            align-items: end;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group label {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        .button-group {
+            display: flex;
+        }
+        
+        .button-group button {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .report-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 160px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .action-btn i {
+            font-size: 16px;
+        }
+        
+        .print-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Enhanced Summary Cards */
+        .summary-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        
+        .summary-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 20px;
+        }
+        
+        .total-products-card .card-icon {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1));
+            color: #3b82f6;
+        }
+        
+        .total-in-card .card-icon {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+            color: #10b981;
+        }
+        
+        .total-out-card .card-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+            color: #f59e0b;
+        }
+        
+        .current-total-card .card-icon {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(124, 58, 237, 0.1));
+            color: #8b5cf6;
+        }
+        
+        .card-content {
+            flex: 1;
+        }
+        
+        .card-label {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .card-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        
+        .total-products-card .card-value {
+            color: #3b82f6;
+        }
+        
+        .total-in-card .card-value {
+            color: #10b981;
+        }
+        
+        .total-out-card .card-value {
+            color: #f59e0b;
+        }
+        
+        .current-total-card .card-value {
+            color: #8b5cf6;
+        }
+        
+        /* Enhanced Table Styles */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table-header h4 {
+            margin: 0;
+            color: #7c3aed;
+            font-size: 18px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
         }
-        #products-section .stock-report-section p {
-            color: #94a3b8;
-            font-size: 14px;
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .table-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .table-action-btn:hover {
+            background: var(--primary-purple);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+        }
+        
+        /* Enhanced Report Button */
+        .report-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            width: 100%;
+            height: 100%;
+        }
+        
+        .report-btn:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+        
+        .report-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .report-btn i {
+            font-size: 18px;
+        }
+        
+        /* Unified Report Section Styling */
+        .report-section {
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.12) 0%, rgba(124, 58, 237, 0.08) 100%) !important;
+            border: 1px solid rgba(139, 92, 246, 0.35) !important;
+            border-radius: 16px !important;
+            padding: 28px !important;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .report-section:hover {
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .report-section h3 {
+            color: #7c3aed !important;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        
+        .report-section p {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+        
+        /* Sales Report Summary Styling */
+        .sales-report-summary {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            margin: 20px 0;
+        }
+        
+        .sales-report-summary > h3 {
+            margin: 0 0 15px 0;
+            color: #7c3aed;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .sales-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
             margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            margin: 0;
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #8b5cf6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+        
+        .loss-stat {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .loss-stat i {
+            color: #ef4444;
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-dark);
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .data-table th {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table tbody tr {
+            transition: all 0.2s ease;
+        }
+        
+        .data-table tbody tr:hover {
+            background: rgba(139, 92, 246, 0.08);
+        }
+        
+        .data-table tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .data-table td:last-child {
+            text-align: center;
+        }
+        
+        .footer-row {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.15));
+            font-weight: bold;
+        }
+        
+        .footer-label {
+            text-align: right !important;
+        }
+        
+        .footer-value {
+            font-size: 16px;
+        }
+        
+        .in-value {
+            color: #10b981;
+        }
+        
+        .out-value {
+            color: #f59e0b;
+        }
+        
+        .current-value {
+            color: #8b5cf6;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+            display: none;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.6;
+        }
+        
+        .empty-state p {
+            margin: 0;
+            font-size: 16px;
         }
 
         /* Product Add Button */
@@ -2236,17 +3120,41 @@
         #finance-section .primary-btn {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
             color: white;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            padding: 16px 32px !important;
+            border: none !important;
+            border-radius: 16px !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+            min-height: 52px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        #suppliers-section .primary-btn::before,
+        #customers-section .primary-btn::before,
+        #users-section .primary-btn::before,
+        #ledger-section .primary-btn::before,
+        #finance-section .primary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        #suppliers-section .primary-btn:hover::before,
+        #customers-section .primary-btn:hover::before,
+        #users-section .primary-btn:hover::before,
+        #ledger-section .primary-btn:hover::before,
+        #finance-section .primary-btn:hover::before {
+            left: 100%;
         }
         #suppliers-section .primary-btn:hover,
         #customers-section .primary-btn:hover,
@@ -2254,8 +3162,16 @@
         #ledger-section .primary-btn:hover,
         #finance-section .primary-btn:hover {
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.6) !important;
+        }
+        #suppliers-section .primary-btn:active,
+        #customers-section .primary-btn:active,
+        #users-section .primary-btn:active,
+        #ledger-section .primary-btn:active,
+        #finance-section .primary-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
         }
 
         /* Cancel Buttons */
@@ -2267,17 +3183,44 @@
         #returns-section .cancel-btn {
             background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
             color: white;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-left: 10px;
+            padding: 16px 32px !important;
+            border: none !important;
+            border-radius: 16px !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-left: 12px !important;
+            box-shadow: 0 6px 20px rgba(100, 116, 139, 0.4) !important;
+            min-height: 52px !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+        #suppliers-section .cancel-btn::before,
+        #customers-section .cancel-btn::before,
+        #users-section .cancel-btn::before,
+        #ledger-section .cancel-btn::before,
+        #finance-section .cancel-btn::before,
+        #returns-section .cancel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        #suppliers-section .cancel-btn:hover::before,
+        #customers-section .cancel-btn:hover::before,
+        #users-section .cancel-btn:hover::before,
+        #ledger-section .cancel-btn:hover::before,
+        #finance-section .cancel-btn:hover::before,
+        #returns-section .cancel-btn:hover::before {
+            left: 100%;
         }
         #suppliers-section .cancel-btn:hover,
         #customers-section .cancel-btn:hover,
@@ -2286,8 +3229,17 @@
         #finance-section .cancel-btn:hover,
         #returns-section .cancel-btn:hover {
             background: linear-gradient(135deg, #475569 0%, #334155 100%) !important;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+            transform: translateY(-4px) scale(1.05) !important;
+            box-shadow: 0 10px 30px rgba(100, 116, 139, 0.6) !important;
+        }
+        #suppliers-section .cancel-btn:active,
+        #customers-section .cancel-btn:active,
+        #users-section .cancel-btn:active,
+        #ledger-section .cancel-btn:active,
+        #finance-section .cancel-btn:active,
+        #returns-section .cancel-btn:active {
+            transform: translateY(-2px) scale(0.98) !important;
+            box-shadow: 0 6px 20px rgba(100, 116, 139, 0.4) !important;
         }
 
         /* Modern Cart Summary - Enhanced */
@@ -3116,7 +4068,7 @@
         <form id="login-form">
             <input type="text" id="username" placeholder="ইউজারনেম" required>
             <input type="password" id="password" placeholder="পাসওয়ার্ড" required>
-            <button type="submit">লগইন</button>
+            <button type="submit"><i class="fas fa-sign-in-alt"></i> লগইন</button>
             <p id="login-error-message" class="error-message"></p>
         </form>
     </div>
@@ -3253,10 +4205,18 @@
                 </div>
 
                 <!-- 2. Stock Alert System - Dashboard Alert Box -->
-                <div class="recent-activities stock-alert-card">
-                    <h3><i class="fas fa-exclamation-triangle"></i> কম স্টক সতর্কতা (<span id="low-stock-count">0</span>)</h3>
+                <div class="recent-activities stock-alert-card minimized">
+                    <div class="alert-header">
+                        <div class="alert-title">
+                            <h3><i class="fas fa-exclamation-triangle"></i> কম স্টক সতর্কতা (<span id="low-stock-count">0</span>)</h3>
+                        </div>
+                        <div class="alert-actions">
+                            <button id="minimize-low-stock-alerts" class="minimize-alerts-btn" title="সতর্কতা এক্সপান্ড করুন"><i class="fas fa-plus"></i></button>
+                            <button id="clear-low-stock-alerts" class="clear-alerts-btn" title="সতর্কতা মুছে ফেলুন"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
                     <div id="stock-alerts-list">
-                         <p>সব পণ্য পর্যাপ্ত পরিমাণে স্টকে আছে।</p>
+                         <p style="text-align: center; color: #6ee7b7; font-weight: 500; font-size: 16px; margin: 0; padding: 20px 0; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.15);"> <i class="fas fa-check-circle" style="margin-right: 8px;"></i>সব পণ্য পর্যাপ্ত পরিমাণে স্টকে আছে।</p>
                     </div>
                 </div>
                 
@@ -3293,85 +4253,117 @@
                 <h2><i class="fas fa-tshirt"></i> পণ্যসমূহ</h2>
                 
                 <!-- ✅ NEW: All Products Stock Report System -->
-                <div class="stock-report-section" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05)); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                    <h3 style="margin-top: 0; color: #8b5cf6;"><i class="fas fa-boxes"></i> সব পণ্যের স্টক রিপোর্ট</h3>
-                    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 15px;">সব পণ্যের স্টক মুভমেন্ট, ঢোকা-বের হওয়া এবং বর্তমান স্টক দেখুন</p>
+                <div class="stock-report-section">
+                    <h3><i class="fas fa-boxes"></i> সব পণ্যের স্টক রিপোর্ট</h3>
+                    <p>সব পণ্যের স্টক মুভমেন্ট, ঢোকা-বের হওয়া এবং বর্তমান স্টক দেখুন</p>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 15px;">
-                        <div>
-                            <label for="stock-report-from-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শুরুর তারিখ:</label>
-                            <input type="date" id="stock-report-from-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                    <div class="report-controls">
+                        <div class="date-range-selector">
+                            <div class="input-group">
+                                <label for="stock-report-from-date">শুরুর তারিখ:</label>
+                                <input type="date" id="stock-report-from-date">
+                            </div>
+                            <div class="input-group">
+                                <label for="stock-report-to-date">শেষ তারিখ:</label>
+                                <input type="date" id="stock-report-to-date">
+                            </div>
+                            <div class="button-group">
+                                <button id="generate-stock-report-btn" class="report-btn primary-btn"><i class="fas fa-chart-bar"></i> স্টক রিপোর্ট দেখুন</button>
+                            </div>
                         </div>
-                        <div>
-                            <label for="stock-report-to-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শেষ তারিখ:</label>
-                            <input type="date" id="stock-report-to-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                        
+                        <div class="report-actions">
+                            <button id="print-stock-summary-btn" class="action-btn print-btn"><i class="fas fa-print"></i> স্টক সারাংশ প্রিন্ট</button>
+                            <button id="print-stock-movement-btn" class="action-btn export-btn"><i class="fas fa-file-alt"></i> স্টক মুভমেন্ট রিপোর্ট প্রিন্ট</button>
+                            <button id="clear-stock-report-btn" class="action-btn clear-btn"><i class="fas fa-times"></i> ক্লিয়ার</button>
                         </div>
-                        <div>
-                            <button id="generate-stock-report-btn" class="primary-btn" style="width: 100%; background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><i class="fas fa-search"></i> স্টক রিপোর্ট দেখুন</button>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button id="print-stock-summary-btn" class="primary-btn" style="background: linear-gradient(135deg, #10b981, #059669); flex: 1; min-width: 150px;"><i class="fas fa-print"></i> স্টক সারাংশ প্রিন্ট</button>
-                        <button id="print-stock-movement-btn" class="primary-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); flex: 1; min-width: 150px;"><i class="fas fa-file-alt"></i> স্টক মুভমেন্ট রিপোর্ট প্রিন্ট</button>
-                        <button id="clear-stock-report-btn" class="cancel-btn" style="flex: 1; min-width: 150px;"><i class="fas fa-times"></i> ক্লিয়ার</button>
                     </div>
                 </div>
                 
                 <!-- Stock Report Display -->
                 <div id="stock-report-display" style="display: none; margin-bottom: 25px;">
                     <!-- Grand Summary Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
-                        <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1)); padding: 15px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.3); text-align: center;">
-                            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">মোট পণ্য</div>
-                            <div id="stock-report-total-products" style="font-size: 24px; font-weight: bold; color: #60a5fa;">0</div>
+                    <div class="summary-cards-grid">
+                        <div class="summary-card total-products-card">
+                            <div class="card-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">মোট পণ্য</div>
+                                <div id="stock-report-total-products" class="card-value">0</div>
+                            </div>
                         </div>
-                        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)); padding: 15px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.3); text-align: center;">
-                            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">মোট স্টক ঢুকেছে</div>
-                            <div id="stock-report-total-in" style="font-size: 24px; font-weight: bold; color: #34d399;">0</div>
+                        <div class="summary-card total-in-card">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">মোট স্টক ঢুকেছে</div>
+                                <div id="stock-report-total-in" class="card-value">0</div>
+                            </div>
                         </div>
-                        <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1)); padding: 15px; border-radius: 10px; border: 1px solid rgba(245, 158, 11, 0.3); text-align: center;">
-                            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">মোট স্টক বের হয়েছে</div>
-                            <div id="stock-report-total-out" style="font-size: 24px; font-weight: bold; color: #fbbf24;">0</div>
+                        <div class="summary-card total-out-card">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">মোট স্টক বের হয়েছে</div>
+                                <div id="stock-report-total-out" class="card-value">0</div>
+                            </div>
                         </div>
-                        <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.1)); padding: 15px; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.3); text-align: center;">
-                            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">বর্তমান মোট স্টক</div>
-                            <div id="stock-report-current-total" style="font-size: 24px; font-weight: bold; color: #a78bfa;">0</div>
+                        <div class="summary-card current-total-card">
+                            <div class="card-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">বর্তমান মোট স্টক</div>
+                                <div id="stock-report-current-total" class="card-value">0</div>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Products Stock Table -->
-                    <div style="background: var(--card-bg); border-radius: 10px; padding: 20px; border: 1px solid var(--border-color);">
-                        <h4 style="margin-top: 0; margin-bottom: 15px; color: #8b5cf6;"><i class="fas fa-list-alt"></i> সব পণ্যের স্টক সারাংশ</h4>
-                        <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
-                            <table id="stock-report-table" style="width: 100%; border-collapse: collapse;">
-                                <thead style="position: sticky; top: 0; background: var(--card-bg); z-index: 10;">
-                                    <tr style="background: rgba(139, 92, 246, 0.2);">
-                                        <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color);">#</th>
-                                        <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color);">পণ্যের নাম</th>
-                                        <th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--border-color);">ক্যাটাগরি</th>
-                                        <th style="padding: 12px; text-align: right; border-bottom: 2px solid var(--border-color);">স্টক ঢুকেছে</th>
-                                        <th style="padding: 12px; text-align: right; border-bottom: 2px solid var(--border-color);">স্টক বের হয়েছে</th>
-                                        <th style="padding: 12px; text-align: right; border-bottom: 2px solid var(--border-color);">বর্তমান স্টক</th>
-                                        <th style="padding: 12px; text-align: center; border-bottom: 2px solid var(--border-color);">স্ট্যাটাস</th>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h4><i class="fas fa-list-alt"></i> সব পণ্যের স্টক সারাংশ</h4>
+                            <div class="table-actions">
+                                <button class="table-action-btn export-table-btn" title="Export to Excel">
+                                    <i class="fas fa-file-excel"></i>
+                                </button>
+                                <button class="table-action-btn refresh-table-btn" title="Refresh Data">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="stock-report-table" class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>পণ্যের নাম</th>
+                                        <th>ক্যাটাগরি</th>
+                                        <th>স্টক ঢুকেছে</th>
+                                        <th>স্টক বের হয়েছে</th>
+                                        <th>বর্তমান স্টক</th>
+                                        <th>স্ট্যাটাস</th>
                                     </tr>
                                 </thead>
                                 <tbody id="stock-report-tbody">
                                     <!-- Dynamic content -->
                                 </tbody>
-                                <tfoot style="position: sticky; bottom: 0; background: var(--card-bg); font-weight: bold;">
-                                    <tr style="background: rgba(139, 92, 246, 0.3);">
-                                        <td colspan="3" style="padding: 12px; text-align: right; border-top: 2px solid var(--border-color);">সর্বমোট:</td>
-                                        <td id="stock-report-footer-in" style="padding: 12px; text-align: right; border-top: 2px solid var(--border-color); color: #34d399; font-size: 16px;">0</td>
-                                        <td id="stock-report-footer-out" style="padding: 12px; text-align: right; border-top: 2px solid var(--border-color); color: #fbbf24; font-size: 16px;">0</td>
-                                        <td id="stock-report-footer-current" style="padding: 12px; text-align: right; border-top: 2px solid var(--border-color); color: #a78bfa; font-size: 16px;">0</td>
-                                        <td style="padding: 12px; border-top: 2px solid var(--border-color);"></td>
+                                <tfoot>
+                                    <tr class="footer-row">
+                                        <td colspan="3" class="footer-label">সর্বমোট:</td>
+                                        <td id="stock-report-footer-in" class="footer-value in-value">0</td>
+                                        <td id="stock-report-footer-out" class="footer-value out-value">0</td>
+                                        <td id="stock-report-footer-current" class="footer-value current-value">0</td>
+                                        <td></td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
-                        <div id="stock-report-empty" style="text-align: center; padding: 30px; color: #94a3b8; display: none;">
-                            <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 10px;"></i>
+                        <div id="stock-report-empty" class="empty-state">
+                            <i class="fas fa-inbox"></i>
                             <p>কোনো পণ্য পাওয়া যায়নি</p>
                         </div>
                     </div>
@@ -3593,7 +4585,7 @@
                             <option value="">সকল সেলার</option>
                             </select>
                     </div>
-                    <button id="filter-sales-report" class="primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
+                    <button id="filter-sales-report" class="report-btn primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
                 </div>
                 <div id="sales-report-summary">
                     <h3>নির্বাচিত সময়ের মোট নিট বিক্রয়: <span id="filtered-sales-total">৳ 0</span></h3>
@@ -3604,7 +4596,7 @@
                     <p id="filtered-total-loss" style="font-size: 16px; font-weight: normal; margin-top: 5px; color: #dc3545;"><i class="fas fa-times-circle"></i> ফেরত পণ্যের মোট ক্ষতি: ৳ 0</p>
                     <button id="print-sales-summary-btn" class="primary-btn" style="margin-top: 15px;"><i class="fas fa-print"></i> সারাংশ প্রিন্ট করুন</button>
                      <!-- 4. Sales & Profit Report System - New Button -->
-                    <button id="product-wise-report-btn" class="info-btn" style="margin-top: 15px; margin-left: 10px;"><i class="fas fa-boxes"></i> পণ্য-ভিত্তিক রিপোর্ট</button>
+                    <button id="product-wise-report-btn" class="action-btn export-btn" style="margin-top: 15px; margin-left: 10px;"><i class="fas fa-boxes"></i> পণ্য-ভিত্তিক রিপোর্ট</button>
                 </div>
                 <table id="sales-report-table">
                     <thead>
@@ -3646,8 +4638,8 @@
                             <option value="yearly">বাৎসরিক</option>
                         </select>
                     </div>
-                    <button id="filter-granular-report" class="primary-btn"><i class="fas fa-filter"></i> রিপোর্ট দেখুন</button>
-                     <button id="print-granular-report-btn" class="info-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
+                    <button id="filter-granular-report" class="report-btn primary-btn"><i class="fas fa-filter"></i> রিপোর্ট দেখুন</button>
+                     <button id="print-granular-report-btn" class="action-btn print-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
                 </div>
 
                 <div id="granular-report-output" style="margin-top: 20px;">
@@ -4014,8 +5006,8 @@
                             <option value="">সকল</option>
                         </select>
                     </div>
-                    <button id="filter-expense-report" class="primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
-                    <button id="print-expense-report" class="primary-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
+                    <button id="filter-expense-report" class="report-btn primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
+                    <button id="print-expense-report" class="action-btn print-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
                 </div>
                 <table id="expense-report-table">
                     <thead>
@@ -4104,27 +5096,29 @@
                 
                 <!-- ✅ NEW: Customer Management Report System -->
                 <!-- ✅ NEW: All Customers Combined Report System -->
-                <div class="all-customers-report-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                    <h3 style="margin-top: 0; color: #10b981;"><i class="fas fa-users"></i> সব কাস্টমারের সম্মিলিত রিপোর্ট</h3>
-                    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 15px;">সব কাস্টমারের একসাথে বিক্রয়, পরিশোধ এবং বাকির সারাংশ দেখুন</p>
+                <div class="all-customers-report-section report-section">
+                    <h3><i class="fas fa-users"></i> সব কাস্টমারের সম্মিলিত রিপোর্ট</h3>
+                    <p>সব কাস্টমারের একসাথে বিক্রয়, পরিশোধ এবং বাকির সারাংশ দেখুন</p>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 15px;">
-                        <div>
-                            <label for="all-customers-from-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শুরুর তারিখ:</label>
-                            <input type="date" id="all-customers-from-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                    <div class="report-controls">
+                        <div class="date-range-selector">
+                            <div class="input-group">
+                                <label for="all-customers-from-date">শুরুর তারিখ:</label>
+                                <input type="date" id="all-customers-from-date">
+                            </div>
+                            <div class="input-group">
+                                <label for="all-customers-to-date">শেষ তারিখ:</label>
+                                <input type="date" id="all-customers-to-date">
+                            </div>
+                            <div class="button-group">
+                                <button id="generate-all-customers-report-btn" class="report-btn primary-btn"><i class="fas fa-users"></i> সব কাস্টমারের রিপোর্ট</button>
+                            </div>
                         </div>
-                        <div>
-                            <label for="all-customers-to-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শেষ তারিখ:</label>
-                            <input type="date" id="all-customers-to-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                        
+                        <div class="report-actions">
+                            <button id="print-all-customers-report-btn" class="action-btn export-btn"><i class="fas fa-print"></i> সম্মিলিত রিপোর্ট প্রিন্ট</button>
+                            <button id="clear-all-customers-report-btn" class="action-btn clear-btn"><i class="fas fa-times"></i> ক্লিয়ার</button>
                         </div>
-                        <div>
-                            <button id="generate-all-customers-report-btn" class="primary-btn" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-search"></i> সব কাস্টমারের রিপোর্ট</button>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px;">
-                        <button id="print-all-customers-report-btn" class="primary-btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); flex: 1;"><i class="fas fa-print"></i> সম্মিলিত রিপোর্ট প্রিন্ট</button>
-                        <button id="clear-all-customers-report-btn" class="cancel-btn" style="flex: 1;"><i class="fas fa-times"></i> ক্লিয়ার</button>
                     </div>
                 </div>
                 
@@ -4187,33 +5181,35 @@
                     </div>
                 </div>
 
-                <div class="customer-report-section" style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                    <h3 style="margin-top: 0; color: var(--light-blue);"><i class="fas fa-file-invoice"></i> একক কাস্টমার রিপোর্ট</h3>
-                    <p style="font-size: 14px; color: #94a3b8; margin-bottom: 15px;">নির্দিষ্ট কাস্টমারের বিস্তারিত লেনদেন ও বাকি তথ্য দেখুন</p>
+                <div class="customer-report-section report-section">
+                    <h3><i class="fas fa-file-invoice"></i> একক কাস্টমার রিপোর্ট</h3>
+                    <p>নির্দিষ্ট কাস্টমারের বিস্তারিত লেনদেন ও বাকি তথ্য দেখুন</p>
                     
-                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; align-items: end; margin-bottom: 15px;">
-                        <div>
-                            <label for="customer-report-select" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">কাস্টমার নির্বাচন করুন:</label>
-                            <select id="customer-report-select" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
-                                <option value="">-- কাস্টমার নির্বাচন করুন --</option>
-                            </select>
+                    <div class="report-controls">
+                        <div class="date-range-selector">
+                            <div class="input-group">
+                                <label for="customer-report-select">কাস্টমার নির্বাচন করুন:</label>
+                                <select id="customer-report-select">
+                                    <option value="">-- কাস্টমার নির্বাচন করুন --</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="customer-report-from-date">শুরুর তারিখ:</label>
+                                <input type="date" id="customer-report-from-date">
+                            </div>
+                            <div class="input-group">
+                                <label for="customer-report-to-date">শেষ তারিখ:</label>
+                                <input type="date" id="customer-report-to-date">
+                            </div>
+                            <div class="button-group">
+                                <button id="generate-customer-report-btn" class="report-btn primary-btn"><i class="fas fa-file-invoice"></i> রিপোর্ট দেখুন</button>
+                            </div>
                         </div>
-                        <div>
-                            <label for="customer-report-from-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শুরুর তারিখ:</label>
-                            <input type="date" id="customer-report-from-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                        
+                        <div class="report-actions">
+                            <button id="print-customer-report-btn" class="action-btn print-btn"><i class="fas fa-print"></i> রিপোর্ট প্রিন্ট করুন</button>
+                            <button id="clear-customer-report-btn" class="action-btn clear-btn"><i class="fas fa-times"></i> ক্লিয়ার</button>
                         </div>
-                        <div>
-                            <label for="customer-report-to-date" style="display: block; margin-bottom: 5px; font-size: 14px; color: #cbd5e1;">শেষ তারিখ:</label>
-                            <input type="date" id="customer-report-to-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
-                        </div>
-                        <div>
-                            <button id="generate-customer-report-btn" class="primary-btn" style="width: 100%;"><i class="fas fa-search"></i> রিপোর্ট দেখুন</button>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px;">
-                        <button id="print-customer-report-btn" class="primary-btn" style="background: linear-gradient(135deg, #10b981, #059669); flex: 1;"><i class="fas fa-print"></i> রিপোর্ট প্রিন্ট করুন</button>
-                        <button id="clear-customer-report-btn" class="cancel-btn" style="flex: 1;"><i class="fas fa-times"></i> ক্লিয়ার</button>
                     </div>
                 </div>
                 
@@ -4395,13 +5391,13 @@
                             <input type="date" id="daily-report-to-date" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
                         </div>
                         <div style="display: flex; align-items: end;">
-                            <button id="generate-daily-report-btn" class="primary-btn" style="width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-search"></i> রিপোর্ট দেখুন</button>
+                            <button id="generate-daily-report-btn" class="report-btn primary-btn"><i class="fas fa-calendar-day"></i> রিপোর্ট দেখুন</button>
                         </div>
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
-                        <button id="print-daily-report-btn" class="primary-btn" style="background: linear-gradient(135deg, #10b981, #059669); flex: 1;"><i class="fas fa-print"></i> রিপোর্ট প্রিন্ট করুন</button>
-                        <button id="clear-daily-report-btn" class="cancel-btn" style="flex: 1;"><i class="fas fa-times"></i> ক্লিয়ার</button>
+                        <button id="print-daily-report-btn" class="action-btn print-btn"><i class="fas fa-print"></i> রিপোর্ট প্রিন্ট করুন</button>
+                        <button id="clear-daily-report-btn" class="action-btn clear-btn"><i class="fas fa-times"></i> ক্লিয়ার</button>
                     </div>
                 </div>
                 
@@ -5984,21 +6980,29 @@
                 }
             });
 
-            document.querySelectorAll('.edit-product-btn').forEach(button => {
-                button.addEventListener('click', (e) => editProduct(e.target.dataset.id));
-            });
-            document.querySelectorAll('.product-card').forEach(card => {
-                const printBtn = card.querySelector('.print-label-btn');
-                printBtn.addEventListener('click', (e) => {
-                    const productId = e.currentTarget.dataset.id;
-                    const quantityInput = e.currentTarget.parentNode.querySelector('.print-qty-input');
-                    const quantity = parseInt(quantityInput.value) || 1;
-                    printBarcodeLabel(productId, quantity); // Pass quantity
+            // Use event delegation instead of attaching events to each element
+            if (!productList.hasAttribute('data-events-bound')) {
+                productList.setAttribute('data-events-bound', 'true');
+                
+                productList.addEventListener('click', function(e) {
+                    if (e.target.closest('.edit-product-btn')) {
+                        e.preventDefault();
+                        const productId = e.target.closest('.edit-product-btn').dataset.id;
+                        editProduct(productId);
+                    } else if (e.target.closest('.print-label-btn')) {
+                        e.preventDefault();
+                        const productCard = e.target.closest('.product-card');
+                        const productId = e.target.closest('.print-label-btn').dataset.id;
+                        const quantityInput = productCard.querySelector('.print-qty-input');
+                        const quantity = parseInt(quantityInput.value) || 1;
+                        printBarcodeLabel(productId, quantity);
+                    } else if (e.target.closest('.delete-product-btn')) {
+                        e.preventDefault();
+                        const productId = e.target.closest('.delete-product-btn').dataset.id;
+                        deleteProduct(productId);
+                    }
                 });
-            });
-            document.querySelectorAll('.delete-product-btn').forEach(button => {
-                button.addEventListener('click', (e) => deleteProduct(e.target.dataset.id));
-            });
+            }
         }
 
         function populateCategoryFilter() {
@@ -6816,7 +7820,8 @@
                     totalAmount: purchaseValue
                 };
                 purchaseHistory.push(newPurchaseRecord);
-                await db.put('purchaseHistory', newPurchaseRecord);
+
+                const purchaseDbPromises = [db.put('purchaseHistory', newPurchaseRecord)];
 
                 if (newProductData.purchaseType === 'cash') {
                     supplier.totalPaid = (supplier.totalPaid || 0) + purchaseValue;
@@ -6826,11 +7831,14 @@
                         amount: purchaseValue, supplierId: supplier.id, supplierName: supplier.name
                     };
                     ledgerEntries.push(newLedgerEntry);
-                    await db.put('ledgerEntries', newLedgerEntry);
+                    purchaseDbPromises.push(db.put('ledgerEntries', newLedgerEntry));
                 } else {
                     supplier.currentDue = (supplier.currentDue || 0) + purchaseValue;
                 }
-                await db.put('suppliers', supplier);
+                purchaseDbPromises.push(db.put('suppliers', supplier));
+                
+                // Execute all purchase-related database operations in parallel
+                await Promise.all(purchaseDbPromises);
                 
                 // Manually update local suppliers array
                 const supplierIndex = suppliers.findIndex(s => s.id === supplier.id);
@@ -6923,9 +7931,41 @@
             suppliers.forEach(s => {
                 const option = document.createElement('option');
                 option.value = s.name;
+                option.setAttribute('data-phone', s.phone || '');
+                option.setAttribute('data-address', s.address || '');
                 datalist.appendChild(option);
             });
         }
+        
+        // Add event listener to auto-populate supplier details when selected
+        document.getElementById('product-supplier-name').addEventListener('change', function() {
+            const selectedOption = Array.from(document.querySelectorAll('#supplier-name-list option'))
+                .find(opt => opt.value === this.value);
+                
+            if (selectedOption) {
+                const phone = selectedOption.getAttribute('data-phone') || '';
+                const address = selectedOption.getAttribute('data-address') || '';
+                
+                document.getElementById('product-supplier-phone').value = phone;
+                document.getElementById('product-supplier-address').value = address;
+            }
+        });
+        
+        // Also update when user types and selects from dropdown
+        document.getElementById('product-supplier-name').addEventListener('input', function() {
+            // Clear fields if user types a new supplier name
+            if (!suppliers.some(s => s.name === this.value)) {
+                document.getElementById('product-supplier-phone').value = '';
+                document.getElementById('product-supplier-address').value = '';
+            } else {
+                // If it's an existing supplier, populate the details
+                const supplier = suppliers.find(s => s.name === this.value);
+                if (supplier) {
+                    document.getElementById('product-supplier-phone').value = supplier.phone || '';
+                    document.getElementById('product-supplier-address').value = supplier.address || '';
+                }
+            }
+        });
 
         function renderSupplierList() {
             supplierListTableBody.innerHTML = '';
@@ -6950,13 +7990,15 @@
                 const ledgerBtn = document.createElement('button');
                 ledgerBtn.innerHTML = '<i class="fas fa-book"></i> লেজার দেখুন';
                 ledgerBtn.className = 'info-btn';
-                ledgerBtn.addEventListener('click', () => showSupplierLedger(supplier));
+                ledgerBtn.dataset.action = 'show-ledger';
+                ledgerBtn.dataset.supplierId = supplier.id;
                 actionCell.appendChild(ledgerBtn);
 
                 const returnBtn = document.createElement('button');
                 returnBtn.innerHTML = '<i class="fas fa-undo"></i> পণ্য ফেরত দিন';
                 returnBtn.className = 'warning-btn';
-                returnBtn.addEventListener('click', () => openSupplierReturnModal(supplier));
+                returnBtn.dataset.action = 'return-modal';
+                returnBtn.dataset.supplierId = supplier.id;
                 actionCell.appendChild(returnBtn);
 
                 const payBtn = document.createElement('button');
@@ -6964,13 +8006,15 @@
                 payBtn.className = 'primary-btn';
                 payBtn.style.backgroundColor = '#28a745';
                 payBtn.disabled = (supplier.currentDue || 0) <= 0;
-                payBtn.addEventListener('click', () => openPaySupplierDueModal(supplier));
+                payBtn.dataset.action = 'pay-modal';
+                payBtn.dataset.supplierId = supplier.id;
                 actionCell.appendChild(payBtn);
 
                 const editBtn = document.createElement('button');
                 editBtn.innerHTML = '<i class="fas fa-edit"></i> সম্পাদনা';
                 editBtn.className = 'edit-btn';
-                editBtn.addEventListener('click', () => editSupplier(supplier.id));
+                editBtn.dataset.action = 'edit-supplier';
+                editBtn.dataset.supplierId = supplier.id;
                 actionCell.appendChild(editBtn);
                 
                 if (currentUser !== null && currentUser.role !== 'admin') {
@@ -6978,6 +8022,40 @@
                    editBtn.style.display = 'none';
                 }
             });
+            
+            // Use event delegation for supplier actions
+            if (!supplierListTableBody.hasAttribute('data-events-bound')) {
+                supplierListTableBody.setAttribute('data-events-bound', 'true');
+                
+                supplierListTableBody.addEventListener('click', function(e) {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    
+                    e.preventDefault();
+                    const action = btn.dataset.action;
+                    const supplierId = btn.dataset.supplierId;
+                    
+                    // Find supplier by ID
+                    const supplier = suppliers.find(s => s.id == supplierId);
+                    if (!supplier) return;
+                    
+                    switch(action) {
+                        case 'show-ledger':
+                            showSupplierLedger(supplier);
+                            break;
+                        case 'return-modal':
+                            openSupplierReturnModal(supplier);
+                            break;
+                        case 'pay-modal':
+                            openPaySupplierDueModal(supplier);
+                            break;
+                        case 'edit-supplier':
+                            editSupplier(supplier.id);
+                            break;
+                    }
+                });
+            }
+            
             if (currentUser !== null && currentUser.role !== 'admin') {
                 addSupplierBtn.style.display = 'none';
             } else {
@@ -7889,7 +8967,18 @@
             };
             
             sales.push(newSale);
-            const dbPromises = [...productUpdatePromises, db.put('sales', newSale), db.put('settings', shopSettings)]; // Save updated invoice counter
+            const dbPromises = [...productUpdatePromises];
+            
+            // Add customer update to the batch if customer was modified
+            if (customerId) {
+                const updatedCustomer = customers.find(c => c.id === customerId);
+                if (updatedCustomer) {
+                    dbPromises.push(db.put('customers', updatedCustomer));
+                }
+            }
+            
+            // Add other operations to the batch
+            dbPromises.push(db.put('sales', newSale), db.put('settings', shopSettings)); // Save updated invoice counter
 
             if (status === 'বাকি') {
                 const newDue = {
@@ -8393,7 +9482,9 @@
                 const printBtn = document.createElement('button');
                 printBtn.textContent = 'প্রিন্ট বিল';
                 printBtn.className = 'primary-btn';
-                printBtn.addEventListener('click', () => printBill(transaction.saleId));
+                printBtn.dataset.action = 'print-bill';
+                printBtn.dataset.transactionId = transaction.id;
+                printBtn.dataset.saleId = transaction.saleId;
                 actionCell.appendChild(printBtn);
                 
                 // ✅ NEW: Enable edit button only for admin on non-returned, non-deleted sales
@@ -8401,7 +9492,8 @@
                     const editBtn = document.createElement('button');
                     editBtn.textContent = 'সম্পাদনা';
                     editBtn.className = 'edit-btn';
-                    editBtn.addEventListener('click', () => loadSaleForEditing(transaction.id));
+                    editBtn.dataset.action = 'edit-bill';
+                    editBtn.dataset.transactionId = transaction.id;
                     actionCell.appendChild(editBtn);
                 }
                 
@@ -8412,10 +9504,38 @@
                     deleteBtn.className = 'danger-btn';
                     deleteBtn.style.background = '#dc3545';
                     deleteBtn.style.marginLeft = '5px';
-                    deleteBtn.addEventListener('click', () => deleteBill(transaction.id));
+                    deleteBtn.dataset.action = 'delete-bill';
+                    deleteBtn.dataset.transactionId = transaction.id;
                     actionCell.appendChild(deleteBtn);
                 }
             });
+            
+            // Use event delegation for sales report actions
+            if (!salesReportTableBody.hasAttribute('data-events-bound')) {
+                salesReportTableBody.setAttribute('data-events-bound', 'true');
+                
+                salesReportTableBody.addEventListener('click', function(e) {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    
+                    e.preventDefault();
+                    const action = btn.dataset.action;
+                    const transactionId = btn.dataset.transactionId;
+                    const saleId = btn.dataset.saleId;
+                    
+                    switch(action) {
+                        case 'print-bill':
+                            if (saleId) printBill(saleId);
+                            break;
+                        case 'edit-bill':
+                            loadSaleForEditing(transactionId);
+                            break;
+                        case 'delete-bill':
+                            deleteBill(transactionId);
+                            break;
+                    }
+                });
+            }
         }
 
         function populateSellerFilter() {
@@ -10465,14 +11585,15 @@
                 const ledgerBtn = document.createElement('button');
                 ledgerBtn.innerHTML = '<i class="fas fa-book"></i> লেজার দেখুন';
                 ledgerBtn.className = 'info-btn';
-                // 3. Customer Ledger System (Use Existing function to trigger modal)
-                ledgerBtn.addEventListener('click', () => showCustomerLedger(customer.id));
+                ledgerBtn.dataset.action = 'show-customer-ledger';
+                ledgerBtn.dataset.customerId = customer.id;
                 actionCell.appendChild(ledgerBtn);
 
                 const editBtn = document.createElement('button');
                 editBtn.innerHTML = '<i class="fas fa-edit"></i> সম্পাদনা';
                 editBtn.className = 'edit-btn';
-                editBtn.addEventListener('click', () => editCustomer(customer.id));
+                editBtn.dataset.action = 'edit-customer';
+                editBtn.dataset.customerId = customer.id;
                 actionCell.appendChild(editBtn);
                 
                 // ** NEW: Admin Due Adjustment Button **
@@ -10480,7 +11601,8 @@
                     const adjustDueBtn = document.createElement('button');
                     adjustDueBtn.innerHTML = '<i class="fas fa-balance-scale"></i> বাকি অ্যাডজাস্ট';
                     adjustDueBtn.className = 'warning-btn';
-                    adjustDueBtn.addEventListener('click', () => adjustCustomerDue(customer.id));
+                    adjustDueBtn.dataset.action = 'adjust-customer-due';
+                    adjustDueBtn.dataset.customerId = customer.id;
                     actionCell.appendChild(adjustDueBtn);
                     
                     // ✅ NEW: Edit Balance Directly Button
@@ -10488,7 +11610,8 @@
                     editBalanceBtn.innerHTML = '<i class="fas fa-money-bill-wave"></i> ব্যালেন্স এডিট';
                     editBalanceBtn.className = 'primary-btn';
                     editBalanceBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-                    editBalanceBtn.addEventListener('click', () => editCustomerBalanceDirectly(customer.id));
+                    editBalanceBtn.dataset.action = 'edit-customer-balance';
+                    editBalanceBtn.dataset.customerId = customer.id;
                     actionCell.appendChild(editBalanceBtn);
                     
                     // ✅ NEW: Delete All Cash Ledger Button
@@ -10496,10 +11619,56 @@
                     deleteCashLedgerBtn.innerHTML = '<i class="fas fa-trash-alt"></i> ক্যাশ লেজার মুছুন';
                     deleteCashLedgerBtn.className = 'danger-btn';
                     deleteCashLedgerBtn.style.background = '#dc3545';
-                    deleteCashLedgerBtn.addEventListener('click', () => deleteAllCustomerCashLedger(customer.id));
+                    deleteCashLedgerBtn.dataset.action = 'delete-cash-ledger';
+                    deleteCashLedgerBtn.dataset.customerId = customer.id;
                     actionCell.appendChild(deleteCashLedgerBtn);
+                    
+                    // ✅ NEW: Delete Customer Button
+                    const deleteCustomerBtn = document.createElement('button');
+                    deleteCustomerBtn.innerHTML = '<i class="fas fa-user-times"></i> কাস্টমার মুছুন';
+                    deleteCustomerBtn.className = 'danger-btn';
+                    deleteCustomerBtn.style.background = 'linear-gradient(135deg, #dc2626, #b91c1c)';
+                    deleteCustomerBtn.title = 'এই কাস্টমার সম্পূর্ণভাবে মুছে ফেলুন';
+                    deleteCustomerBtn.dataset.action = 'delete-customer';
+                    deleteCustomerBtn.dataset.customerId = customer.id;
+                    actionCell.appendChild(deleteCustomerBtn);
                 }
-
+            
+            // Use event delegation for customer actions
+            if (!customerListTableBody.hasAttribute('data-events-bound')) {
+                customerListTableBody.setAttribute('data-events-bound', 'true');
+                
+                customerListTableBody.addEventListener('click', function(e) {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    
+                    e.preventDefault();
+                    const action = btn.dataset.action;
+                    const customerId = btn.dataset.customerId;
+                    
+                    switch(action) {
+                        case 'show-customer-ledger':
+                            showCustomerLedger(customerId);
+                            break;
+                        case 'edit-customer':
+                            editCustomer(customerId);
+                            break;
+                        case 'adjust-customer-due':
+                            adjustCustomerDue(customerId);
+                            break;
+                        case 'edit-customer-balance':
+                            editCustomerBalanceDirectly(customerId);
+                            break;
+                        case 'delete-cash-ledger':
+                            deleteAllCustomerCashLedger(customerId);
+                            break;
+                        case 'delete-customer':
+                            deleteCustomer(customerId);
+                            break;
+                    }
+                });
+            }
+            
                 if (currentUser && currentUser.role !== 'admin') {
                     editBtn.disabled = true;
                 }
@@ -11471,6 +12640,126 @@
                 hideLoader();
                 console.error('Error deleting cash ledger:', error);
                 alert('❌ ক্যাশ লেজার মুছতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+            }
+        }
+        
+        // ✅ NEW: Delete Customer Function
+        async function deleteCustomer(customerId) {
+            if (currentUser.role !== 'admin') {
+                alert('আপনার কাস্টমার মুছার অনুমতি নেই।');
+                return;
+            }
+            
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                alert('কাস্টমার খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            // Check for related records
+            const relatedSales = sales.filter(s => s.customerId === customerId);
+            const relatedPayments = ledgerEntries.filter(e => e.customerId === customerId && e.type === 'income' && (e.category === 'due_collection' || e.category === 'sales_income'));
+            
+            // Confirmation dialog
+            const confirmMessage = 
+                `⚠️ সতর্কতা: আপনি এই কাস্টমার সম্পূর্ণভাবে মুছতে চলেছেন!
+
+` +
+                `কাস্টমার: ${customer.name}
+` +
+                `ফোন: ${customer.phone}
+` +
+                `ঠিকানা: ${customer.address || 'N/A'}
+` +
+                `ধরণ: ${customer.type || 'N/A'}
+
+` +
+                `মুছে ফেলা হবে:
+` +
+                `• কাস্টমার তথ্য
+` +
+                `• সম্পর্কিত বিক্রয় রেকর্ড: ${relatedSales.length} টি
+` +
+                `• সম্পর্কিত পেমেন্ট রেকর্ড: ${relatedPayments.length} টি
+
+` +
+                `এই কাজটি অপরিবর্তনীয়! আপনি কি নিশ্চিত?`;
+            
+            if (!confirm(confirmMessage)) {
+                return;
+            }
+            
+            // Final confirmation
+            if (!confirm(`আবার নিশ্চিত করুন: "${customer.name}" কাস্টমার সম্পূর্ণভাবে মুছে ফেলা হবে। এটি অপরিবর্তনীয়!`)) {
+                return;
+            }
+            
+            try {
+                showLoader();
+                
+                const dbPromises = [];
+                
+                // 1. Delete all related sales records
+                for (const sale of relatedSales) {
+                    await db.delete('sales', sale.id);
+                    const index = sales.findIndex(s => s.id === sale.id);
+                    if (index !== -1) {
+                        sales.splice(index, 1);
+                    }
+                }
+                
+                // 2. Delete all related payment records
+                for (const payment of relatedPayments) {
+                    await db.delete('ledgerEntries', payment.id);
+                    const index = ledgerEntries.findIndex(e => e.id === payment.id);
+                    if (index !== -1) {
+                        ledgerEntries.splice(index, 1);
+                    }
+                }
+                
+                // 3. Delete the customer record
+                await db.delete('customers', customerId);
+                const customerIndex = customers.findIndex(c => c.id === customerId);
+                if (customerIndex !== -1) {
+                    customers.splice(customerIndex, 1);
+                }
+                
+                // 4. Create audit trail entry
+                const auditEntry = {
+                    id: generateUniqueId('L'),
+                    timestamp: new Date().toISOString(),
+                    type: 'expense',
+                    category: 'customer_deleted',
+                    description: `কাস্টমার মুছে ফেলা হয়েছে: ${customer.name} - ফোন: ${customer.phone}`,
+                    amount: 0,
+                    customerId: customerId,
+                    customerName: customer.name,
+                    saleId: 'CUSTOMER_DELETED_' + customerId
+                };
+                ledgerEntries.push(auditEntry);
+                dbPromises.push(db.put('ledgerEntries', auditEntry));
+                
+                await Promise.all(dbPromises);
+                
+                hideLoader();
+                
+                alert(`✅ কাস্টমার সফলভাবে মুছে ফেলা হয়েছে!
+
+` +
+                      `কাস্টমার: ${customer.name}
+` +
+                      `মোট বিক্রয় মুছা: ${relatedSales.length} টি
+` +
+                      `মোট পেমেন্ট মুছা: ${relatedPayments.length} টি`);
+                
+                // Refresh UI
+                updateAllUI();
+                renderCustomerList();
+                
+            } catch (error) {
+                hideLoader();
+                console.error('Error deleting customer:', error);
+                alert('❌ কাস্টমার মুছতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
             }
         }
 
@@ -12526,12 +13815,105 @@
             lowStockProducts.forEach(p => {
                 const minStock = p.minStock || window.SALES_FORECAST_CONFIG.PRODUCT_MIN_STOCK_DEFAULT;
                 const li = document.createElement('li');
-                li.innerHTML = `⚠️ <span class="low-stock-product-name">${p.name}</span>: স্টক: ${p.stock} ${p.unit} | মিনিমাম: ${minStock}
-                    <button class="info-btn" style="float: right; padding: 4px 8px; margin: 0; font-size: 13px;" 
-                     onclick="window.sendStockAlertToOwner('${p.name}', ${p.stock});">অ্যাডমিনকে মেসেজ</button>`;
+                li.innerHTML = `⚠️ <span class="low-stock-product-name">${p.name}</span>: স্টক: ${p.stock} ${p.unit} | মিনিমাম: ${minStock}`;
                 ul.appendChild(li);
             });
             alertsList.appendChild(ul);
+        }
+        
+        // Function to open direct stock update modal
+        function openDirectStockUpdate(productId, productName, currentStock) {
+            // Create a modal to update stock directly
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px; padding: 25px;">
+                    <div class="modal-header">
+                        <h3><i class="fas fa-box"></i> স্টক যোগ করুন</h3>
+                        <span class="close" onclick="this.parentElement.parentElement.parentElement.style.display='none'">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>পণ্য:</strong> \${productName}</p>
+                        <p><strong>বর্তমান স্টক:</strong> \${currentStock}</p>
+                        <div style="margin: 20px 0;">
+                            <label for="direct-stock-qty-\${productId}" style="display: block; margin-bottom: 8px;">যোগ করার পরিমাণ:</label>
+                            <input type="number" id="direct-stock-qty-\${productId}" 
+                                   value="1" min="1" 
+                                   style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light);">
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <label for="direct-stock-note-\${productId}" style="display: block; margin-bottom: 8px;">নোট (ঐচ্ছিক):</label>
+                            <textarea id="direct-stock-note-\${productId}" 
+                                      placeholder="কারণ লিখুন (যেমন: নতুন ক্রয়, ফেরত, ইত্যাদি)"
+                                      style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light;); height: 80px;"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" onclick="this.parentElement.parentElement.parentElement.style.display='none'">বাতিল করুন</button>
+                        <button class="primary-btn" onclick="updateProductStockDirectly('\${productId}', '\${productName}', \${currentStock})">স্টক আপডেট করুন</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Function to update product stock directly
+        async function updateProductStockDirectly(productId, productName, currentStock) {
+            const qtyInput = document.getElementById(`direct-stock-qty-\${productId}`);
+            const noteInput = document.getElementById(`direct-stock-note-\${productId}`);
+            
+            const addQty = parseInt(qtyInput.value);
+            const note = noteInput.value.trim();
+            
+            if (!addQty || addQty <= 0) {
+                alert('দয়া করে সঠিক পরিমাণ লিখুন');
+                return;
+            }
+            
+            if (!confirm(`\nআপনি কি নিশ্চিত যে \${productName} পণ্যের স্টকে \${addQty} পরিমাণ যোগ করতে চান?\n\nবর্তমান স্টক: \${currentStock}\nনতুন স্টক: \${currentStock + addQty}`)) {
+                return;
+            }
+            
+            try {
+                // Find the product
+                const productIndex = products.findIndex(p => p.id === productId);
+                if (productIndex === -1) {
+                    alert('পণ্য খুঁজে পাওয়া যায়নি');
+                    return;
+                }
+                
+                const product = products[productIndex];
+                
+                // Update stock
+                const newStock = (product.stock || 0) + addQty;
+                product.stock = newStock;
+                
+                // Update last updated timestamp
+                product.lastUpdated = new Date().toISOString();
+                
+                // Save to database
+                await db.put('products', product);
+                
+                // Update UI
+                renderProductList();
+                
+                // Update stock alerts
+                renderStockAlerts();
+                
+                // Close modal
+                const modal = document.querySelector('.modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                    modal.remove();
+                }
+                
+                alert(`\n\nসফলভাবে \${productName} পণ্যের স্টকে \${addQty} পরিমাণ যোগ করা হয়েছে!\n\nবর্তমান স্টক: \${newStock}`);
+                
+            } catch (error) {
+                console.error('Error updating product stock:', error);
+                alert('স্টক আপডেট করতে সমস্যা হয়েছে');
+            }
         }
         
         // ===================================
@@ -13055,6 +14437,70 @@
              
              // Hide loader one last time in case there was a delay in the promises above
              hideLoader();
+             
+             // Add event listener for the clear low stock alerts button
+             const clearLowStockAlertsBtn = document.getElementById('clear-low-stock-alerts');
+             if (clearLowStockAlertsBtn) {
+                 clearLowStockAlertsBtn.addEventListener('click', function() {
+                     const alertsList = document.getElementById('stock-alerts-list');
+                     const lowStockCount = document.getElementById('low-stock-count');
+                     
+                     // Clear the alerts list and show the "no low stock" message
+                     alertsList.innerHTML = '<p>সব পণ্য পর্যাপ্ত পরিমাণে স্টকে আছে।</p>';
+                     
+                     // Update the low stock count to 0
+                     lowStockCount.textContent = '0';
+                     
+                     // Optional: Show a confirmation message
+                     alert('কম স্টক সতর্কতা মুছে ফেলা হয়েছে।');
+                 });
+             }
+             
+             // Add event listener for the minimize low stock alerts button
+             const minimizeLowStockAlertsBtn = document.getElementById('minimize-low-stock-alerts');
+             const stockAlertCard = document.querySelector('.stock-alert-card');
+             if (minimizeLowStockAlertsBtn && stockAlertCard) {
+                 minimizeLowStockAlertsBtn.addEventListener('click', function() {
+                     stockAlertCard.classList.toggle('minimized');
+                     
+                     // Change the icon based on state
+                     const icon = minimizeLowStockAlertsBtn.querySelector('i');
+                     if (stockAlertCard.classList.contains('minimized')) {
+                         icon.className = 'fas fa-plus';
+                         minimizeLowStockAlertsBtn.title = 'সতর্কতা এক্সপান্ড করুন';
+                     } else {
+                         icon.className = 'fas fa-minus';
+                         minimizeLowStockAlertsBtn.title = 'সতর্কতা মিনিমাইজ করুন';
+                     }
+                 });
+                 
+                 // Also allow clicking on the title to expand when minimized
+                 const alertTitle = document.querySelector('.alert-title h3');
+                 if (alertTitle) {
+                     alertTitle.addEventListener('click', function() {
+                         if (stockAlertCard.classList.contains('minimized')) {
+                             stockAlertCard.classList.remove('minimized');
+                             const icon = minimizeLowStockAlertsBtn.querySelector('i');
+                             icon.className = 'fas fa-minus';
+                             minimizeLowStockAlertsBtn.title = 'সতর্কতা মিনিমাইজ করুন';
+                         }
+                     });
+                 }
+             }
+             
+             // Auto-hide alerts when stock is replenished
+             // Listen for product updates
+             const originalUpdateProduct = window.updateProduct;
+             window.updateProduct = async function(productId) {
+                 if (originalUpdateProduct) {
+                     await originalUpdateProduct(productId);
+                 }
+                 
+                 // Re-render alerts to check if any should be hidden
+                 setTimeout(() => {
+                     renderStockAlerts();
+                 }, 500);
+             };
         });
 
     </script>
