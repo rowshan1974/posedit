@@ -3899,6 +3899,136 @@
             gap: 15px;
             margin-bottom: 20px;
         }
+        
+        /* LC Module Styles */
+        #lc-section h2 {
+            color: var(--text-light);
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+        }
+        
+        #lc-section h2 i {
+            color: #8b5cf6;
+        }
+        
+        .lc-form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .lc-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .lc-form-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .lc-form-group input,
+        .lc-form-group select,
+        .lc-form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-light);
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .lc-form-group input:focus,
+        .lc-form-group select:focus,
+        .lc-form-group textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .lc-form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .lc-report-filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        
+        .lc-report-filters input[type="date"],
+        .lc-report-filters input[type="text"],
+        .lc-report-filters select {
+            flex: 1;
+            min-width: 180px;
+            margin-bottom: 0;
+        }
+        
+        #lc-report-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a2435;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        #lc-report-table thead {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        
+        #lc-report-table th {
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        #lc-report-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+        
+        #lc-report-table tbody tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        #lc-report-table td {
+            padding: 12px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        
+        .lc-delete-btn {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .lc-delete-btn:hover {
+            background: linear-gradient(135deg, #c82333, #bd2130);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
 
 
         /* Customer Data Section */
@@ -4094,6 +4224,9 @@
                     <li id="nav-ledger"><a href="#" data-section="ledger"><i class="fas fa-money-check-alt"></i> Cash Ledger</a></li> 
                      <!-- NEW: Bank Module (Consolidated Finance) -->
                     <li id="nav-finance"><a href="#" data-section="finance"><i class="fas fa-university"></i> Bank Module</a></li>
+                    <!-- NEW: LC Module -->
+                    <li id="nav-lc"><a href="#" data-section="lc"><i class="fas fa-file-contract"></i> LC Module</a></li>
+                    <li id="nav-lc-payment"><a href="#" data-section="lc-payment"><i class="fas fa-money-bill-wave"></i> LC Payment</a></li>
                     <!-- NEW: Expense Report -->
                     <li id="nav-expenses"><a href="#" data-section="expenses"><i class="fas fa-file-invoice-dollar"></i> Expense Report</a></li> 
 
@@ -4548,9 +4681,9 @@
                 <form id="pos-payment-form">
                     <label for="payment-method">পেমেন্টের ধরণ:</label>
                     <select id="payment-method" required>
+                        <option value="due">বাকিতে</option>
                         <option value="cash">নগদ (Ledger)</option>
                         <option value="bank">ব্যাংক</option>
-                        <option value="due">বাকিতে</option>
                     </select>
                     <!-- NEW: Bank Select for POS -->
                     <div id="pos-bank-select-container" style="display:none; margin-bottom: 20px;">
@@ -5024,6 +5157,289 @@
                         </tbody>
                 </table>
             </section>
+            
+            <!-- NEW: LC Module Section -->
+            <section id="lc-section" class="app-section">
+                <h2><i class="fas fa-file-contract"></i> LC Module (Letter of Credit)</h2>
+                
+                <!-- LC Summary Cards -->
+                <div class="ledger-summary">
+                    <div class="summary-card" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-file-contract"></i>
+                        <h3>মোট LC সংখ্যা</h3>
+                        <p id="lc-total-count">0</p>
+                    </div>
+                    <div class="summary-card" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <h3>মোট LC পরিমাণ</h3>
+                        <p id="lc-total-amount">৳ 0</p>
+                    </div>
+                    <div class="summary-card expense" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <h3>মোট পরিশোধিত</h3>
+                        <p id="lc-total-paid">৳ 0</p>
+                    </div>
+                    <div class="summary-card" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>মোট বকেয়া</h3>
+                        <p id="lc-total-due">৳ 0</p>
+                    </div>
+                </div>
+
+                <!-- Step 1: Add New LC -->
+                <div class="ledger-entry-form">
+                    <h3><i class="fas fa-plus-circle"></i> ধাপ ১: নতুন LC যোগ করুন</h3>
+                    <form id="lc-add-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lc-number">LC নম্বর <span style="color: red;">*</span></label>
+                                <input type="text" id="lc-number" required placeholder="LC নম্বর লিখুন">
+                            </div>
+                            <div class="form-group">
+                                <label for="lc-date">তারিখ <span style="color: red;">*</span></label>
+                                <input type="date" id="lc-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lc-initial-due">প্রাথমিক বকেয়া পরিমাণ (৳)</label>
+                                <input type="number" id="lc-initial-due" min="0" step="0.01" placeholder="0.00 (ঐচ্ছিক)">
+                                <small style="color: #94a3b8; margin-top: 5px; display: block;">পরবর্তীতে এডিট করা যাবে</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="lc-description">বিবরণ</label>
+                                <input type="text" id="lc-description" placeholder="LC বিবরণ লিখুন">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn"><i class="fas fa-save"></i> LC সংরক্ষণ করুন</button>
+                            <button type="reset" class="action-btn"><i class="fas fa-redo"></i> রিসেট</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 2: LC List with Payment Option -->
+                <h3><i class="fas fa-list-alt"></i> LC তালিকা ও পেমেন্ট</h3>
+                <div class="report-filters">
+                    <div>
+                        <label for="lc-report-from-date">থেকে তারিখ:</label>
+                        <input type="date" id="lc-report-from-date">
+                    </div>
+                    <div>
+                        <label for="lc-report-to-date">পর্যন্ত তারিখ:</label>
+                        <input type="date" id="lc-report-to-date">
+                    </div>
+                    <div>
+                        <label for="lc-report-number">LC নম্বর:</label>
+                        <input type="text" id="lc-report-number" placeholder="LC নম্বর দিয়ে খুঁজুন">
+                    </div>
+                    <button id="filter-lc-report" class="report-btn primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
+                    <button id="print-lc-report" class="action-btn print-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
+                </div>
+                
+                <table id="lc-list-table">
+                    <thead>
+                        <tr>
+                            <th>LC নম্বর</th>
+                            <th>তারিখ</th>
+                            <th>মোট বকেয়া</th>
+                            <th>পরিশোধিত</th>
+                            <th>অবশিষ্ট বকেয়া</th>
+                            <th>বিবরণ</th>
+                            <th>একশন</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- NEW: LC Payment Entry Section -->
+            <section id="lc-payment-section" class="app-section">
+                <h2><i class="fas fa-money-bill-wave"></i> LC পেমেন্ট এন্ট্রি</h2>
+                
+                <!-- Summary Cards -->
+                <div class="ledger-summary">
+                    <div class="summary-card">
+                        <h3>মোট LC</h3>
+                        <p id="lc-pay-total-count">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>মোট বকেয়া</h3>
+                        <p id="lc-pay-total-due">৳ 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>মোট পরিশোধিত</h3>
+                        <p id="lc-pay-total-paid">৳ 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>অবশিষ্ট বকেয়া</h3>
+                        <p id="lc-pay-remaining-due">৳ 0</p>
+                    </div>
+                </div>
+                
+                <!-- Quick Payment Form -->
+                <div class="ledger-entry-form">
+                    <h3><i class="fas fa-plus-circle"></i> দ্রুত পেমেন্ট করুন</h3>
+                    
+                    <form id="quick-lc-payment-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quick-lc-select">LC নির্বাচন করুন <span style="color: red;">*</span></label>
+                                <select id="quick-lc-select" required>
+                                    <option value="">-- LC নির্বাচন করুন --</option>
+                                </select>
+                                <small style="color: #94a3b8; margin-top: 5px; display: block;">বকেয়া আছে এমন LC</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="quick-lc-pay-amount">পেমেন্টের পরিমাণ (৳) <span style="color: red;">*</span></label>
+                                <input type="number" id="quick-lc-pay-amount" step="0.01" min="0" required placeholder="0.00">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quick-lc-pay-date">পেমেন্ট তারিখ <span style="color: red;">*</span></label>
+                                <input type="date" id="quick-lc-pay-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quick-lc-pay-source">পেমেন্ট উৎস <span style="color: red;">*</span></label>
+                                <select id="quick-lc-pay-source" required>
+                                    <option value="">-- উৎস নির্বাচন করুন --</option>
+                                    <option value="bank">ব্যাংক থেকে</option>
+                                    <option value="cash">Cash Ledger থেকে</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group" id="quick-lc-bank-group" style="display: none;">
+                                <label for="quick-lc-bank-select">ব্যাংক নির্বাচন করুন</label>
+                                <select id="quick-lc-bank-select">
+                                    <option value="">-- ব্যাংক নির্বাচন করুন --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quick-lc-pay-note">নোট/বিবরণ</label>
+                                <input type="text" id="quick-lc-pay-note" placeholder="পেমেন্ট বিবরণ (ঐচ্ছিক)">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="primary-btn"><i class="fas fa-check-circle"></i> পেমেন্ট সংরক্ষণ করুন</button>
+                            <button type="reset" class="action-btn"><i class="fas fa-redo"></i> রিসেট</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Payment History -->
+                <h3><i class="fas fa-history"></i> পেমেন্ট ইতিহাস</h3>
+                <div class="report-filters">
+                    <div>
+                        <label for="lc-payment-from-date">থেকে তারিখ:</label>
+                        <input type="date" id="lc-payment-from-date">
+                    </div>
+                    <div>
+                        <label for="lc-payment-to-date">পর্যন্ত তারিখ:</label>
+                        <input type="date" id="lc-payment-to-date">
+                    </div>
+                    <div>
+                        <label for="lc-payment-filter-lc">LC নম্বর:</label>
+                        <input type="text" id="lc-payment-filter-lc" placeholder="LC নম্বর">
+                    </div>
+                    <button id="filter-lc-payment-history" class="report-btn primary-btn"><i class="fas fa-filter"></i> ফিল্টার</button>
+                    <button id="print-lc-payment-history" class="action-btn print-btn"><i class="fas fa-print"></i> প্রিন্ট</button>
+                </div>
+                
+                <table id="lc-payment-history-table">
+                    <thead>
+                        <tr>
+                            <th>তারিখ</th>
+                            <th>LC নম্বর</th>
+                            <th>পেমেন্ট পরিমাণ</th>
+                            <th>পেমেন্ট উৎস</th>
+                            <th>ব্যাংক/ক্যাস</th>
+                            <th>বিবরণ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- LC Payment Modal -->
+            <div id="lc-payment-modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-button" id="close-lc-payment-modal">&times;</span>
+                    <h3><i class="fas fa-money-bill-wave"></i> LC পেমেন্ট করুন</h3>
+                    
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <p style="margin: 5px 0;"><strong>LC নম্বর:</strong> <span id="lc-pay-number"></span></p>
+                        <p style="margin: 5px 0;"><strong>মোট বকেয়া:</strong> <span id="lc-pay-total"></span></p>
+                        <p style="margin: 5px 0;"><strong>ইতিমধ্যে পরিশোধিত:</strong> <span id="lc-pay-paid"></span></p>
+                        <hr style="border-color: rgba(16, 185, 129, 0.3); margin: 10px 0;">
+                        <p style="margin: 5px 0; font-size: 18px; font-weight: bold; color: #dc3545;">অবশিষ্ট বকেয়া: <span id="lc-pay-due"></span></p>
+                    </div>
+                    
+                    <form id="lc-payment-form">
+                        <input type="hidden" id="lc-pay-id">
+                        
+                        <label for="lc-pay-amount">পেমেন্টের পরিমাণ (৳) <span style="color: red;">*</span></label>
+                        <input type="number" id="lc-pay-amount" step="0.01" min="0" required placeholder="0.00">
+                        
+                        <label for="lc-pay-date" style="margin-top: 15px;">পেমেন্ট তারিখ <span style="color: red;">*</span></label>
+                        <input type="date" id="lc-pay-date" required>
+                        
+                        <label for="lc-pay-source" style="margin-top: 15px;">পেমেন্ট উৎস <span style="color: red;">*</span></label>
+                        <select id="lc-pay-source" required>
+                            <option value="">-- উৎস নির্বাচন করুন --</option>
+                            <option value="bank">ব্যাংক থেকে</option>
+                            <option value="cash">Cash Ledger থেকে</option>
+                        </select>
+                        
+                        <div id="lc-pay-bank-group" style="display: none; margin-top: 15px;">
+                            <label for="lc-pay-bank-select">ব্যাংক নির্বাচন করুন</label>
+                            <select id="lc-pay-bank-select">
+                                <option value="">-- ব্যাংক নির্বাচন করুন --</option>
+                            </select>
+                        </div>
+                        
+                        <label for="lc-pay-note" style="margin-top: 15px;">নোট/বিবরণ</label>
+                        <input type="text" id="lc-pay-note" placeholder="পেমেন্ট বিবরণ (ঐচ্ছিক)">
+                        
+                        <button type="submit" class="primary-btn" style="margin-top: 20px;"><i class="fas fa-check-circle"></i> পেমেন্ট সংরক্ষণ করুন</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- LC Edit Due Modal -->
+            <div id="lc-edit-due-modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-button" id="close-lc-edit-due-modal">&times;</span>
+                    <h3><i class="fas fa-edit"></i> LC বকেয়া এডিট করুন</h3>
+                    
+                    <div style="background: rgba(245, 158, 11, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(245, 158, 11, 0.3);">
+                        <p style="margin: 5px 0;"><strong>LC নম্বর:</strong> <span id="lc-edit-number"></span></p>
+                        <p style="margin: 5px 0;"><strong>বর্তমান বকেয়া:</strong> <span id="lc-edit-current-due"></span></p>
+                        <p style="margin: 5px 0; font-size: 14px; color: #94a3b8;">আপনি যেকোনো সময় বকেয়া পরিমাণ পরিবর্তন করতে পারবেন</p>
+                    </div>
+                    
+                    <form id="lc-edit-due-form">
+                        <input type="hidden" id="lc-edit-id">
+                        
+                        <label for="lc-edit-total-due">নতুন মোট বকেয়া পরিমাণ (৳) <span style="color: red;">*</span></label>
+                        <input type="number" id="lc-edit-total-due" step="0.01" min="0" required placeholder="0.00">
+                        <small style="color: #94a3b8; display: block; margin-top: 5px;">মোট বকেয়ার নতুন পরিমাণ লিখুন</small>
+                        
+                        <label for="lc-edit-reason" style="margin-top: 15px;">পরিবর্তনের কারণ</label>
+                        <input type="text" id="lc-edit-reason" placeholder="কেন বকেয়া পরিবর্তন করছেন? (ঐচ্ছিক)">
+                        
+                        <button type="submit" class="primary-btn" style="margin-top: 20px;"><i class="fas fa-save"></i> বকেয়া আপডেট করুন</button>
+                    </form>
+                </div>
+            </div>
             
             <section id="customer-data-section" class="app-section">
                 <h2><i class="fas fa-address-book"></i> কাস্টমার ডেটা</h2>
@@ -5727,7 +6143,15 @@
             <p>মোট বকেয়া: <span id="modal-due-total-outstanding"></span></p>
             <label for="payment-amount">পরিশোধের পরিমাণ (৳):</label>
             <input type="number" id="payment-amount" step="0.01" min="0" required>
-            <label for="payment-method-due">পেমেন্টের ধরণ:</label>
+            
+            <!-- Discount Field -->
+            <label for="due-discount" style="margin-top: 15px;">
+                <i class="fas fa-percent" style="color: #f59e0b;"></i> ডিসকাউন্ট (৳):
+            </label>
+            <input type="number" id="due-discount" step="0.01" min="0" value="0" placeholder="0.00">
+            <small style="color: #94a3b8; display: block; margin-top: 5px;">কাস্টমারকে ডিসকাউন্ট দিন (ঐচ্ছিক)</small>
+            
+            <label for="payment-method-due" style="margin-top: 15px;">পেমেন্টের ধরণ:</label>
             <select id="payment-method-due" required>
                 <option value="cash">নগদ (Cash Ledger)</option>
                 <option value="bank">ব্যাংক</option>
@@ -5737,7 +6161,15 @@
                 <label for="due-bank-select">ব্যাংক নির্বাচন করুন:</label>
                 <select id="due-bank-select"></select>
             </div>
-            <p>বাকি থাকবে: <span id="modal-due-remaining">৳ 0</span></p>
+            
+            <!-- Payment Summary -->
+            <div style="background: rgba(139, 92, 246, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                <p style="margin: 5px 0; font-size: 14px;">মোট বকেয়া: <strong id="summary-total-due">৳ 0</strong></p>
+                <p style="margin: 5px 0; font-size: 14px; color: #f59e0b;">ডিসকাউন্ট: <strong id="summary-discount">৳ 0</strong></p>
+                <p style="margin: 5px 0; font-size: 14px; color: #10b981;">পরিশোধ: <strong id="summary-payment">৳ 0</strong></p>
+                <hr style="border-color: rgba(139, 92, 246, 0.3); margin: 10px 0;">
+                <p style="margin: 5px 0; font-size: 16px; font-weight: bold;">বাকি থাকবে: <span id="modal-due-remaining" style="color: #dc3545;">৳ 0</span></p>
+            </div>
             <button id="process-due-payment-btn" class="primary-btn"><i class="fas fa-check-circle"></i> জমা দিন</button>
             <button type="button" class="cancel-btn close-button"><i class="fas fa-times"></i> বাতিল</button>
             <div id="payment-receipt-section" style="display:none; margin-top: 20px; text-align: center;">
@@ -6004,6 +6436,7 @@
         // NEW GLOBAL ARRAYS
         let banks = []; // Section 4A: Bank Setup
         let bankTransactions = []; // Section 4B: Bank Transaction History
+        let lcTransactions = []; // LC Module Transactions
 
         // ধাপ ২.২: shopSettings এ snConfig সরানো হয়েছে
         let shopSettings = {
@@ -6024,6 +6457,7 @@
                     'others': 'অন্যান্য Cash খরচ', // Renamed for clarity
                     'manual_due_adjustment': 'ম্যানুয়াল বাকি অ্যাডজাস্টমেন্ট (মাইনাস)',
                     'bank_withdrawal_expense': 'ব্যাংক থেকে তুলে খরচ', // NEW: Bank Withdrawal (Expense)
+                    'lc_payment': 'LC পেমেন্ট', // LC Module
                 },
                 income: {
                     'sales_income': 'বিক্রয় থেকে আয় (Cash)', // Renamed for clarity
@@ -6136,8 +6570,17 @@
                     db.getAll('products'), db.getAll('suppliers'), db.getAll('customers'), db.getAll('users'),
                     db.getAll('sales'), db.getAll('dues'), db.getAll('ledgerEntries'),
                     db.get('settings', 'main'), db.getAll('purchaseHistory'), db.getAll('supplierReturns'),
-                    db.getAll('banks'), db.getAll('bankTransactions') // NEW FETCH
+                    db.getAll('banks'), db.getAll('bankTransactions')
                 ]);
+                
+                // Fetch LC Transactions separately with error handling
+                let lcTransactionsData = [];
+                try {
+                    lcTransactionsData = await db.getAll('lcTransactions') || [];
+                } catch (error) {
+                    console.warn('LC Transactions collection not found, initializing empty:', error);
+                    lcTransactionsData = [];
+                }
 
                 products = productsData;
                 suppliers = suppliersData;
@@ -6154,6 +6597,7 @@
                 supplierReturns = supplierReturnsData;
                 banks = banksData; // NEW
                 bankTransactions = bankTransactionsData; // NEW
+                lcTransactions = lcTransactionsData || []; // LC Module
 
 
                 if (settingsData) {
@@ -6248,6 +6692,7 @@
             populateBankSelectors(); // NEW
             renderBankTransactions(); // NEW
             renderExpenseReport(); // NEW
+            renderLCTransactions(); // LC Module
             populateLedgerCategoryFilter();
             renderUserList();
             updateUserProfileDisplay();
@@ -6382,6 +6827,10 @@
         const paymentMethodDueSelect = document.getElementById('payment-method-due');
         const dueBankSelectContainer = document.getElementById('due-bank-select-container'); // NEW
         const dueBankSelect = document.getElementById('due-bank-select'); // NEW
+        const dueDiscountInput = document.getElementById('due-discount'); // Discount Field
+        const summaryTotalDue = document.getElementById('summary-total-due'); // Summary Total
+        const summaryDiscount = document.getElementById('summary-discount'); // Summary Discount
+        const summaryPayment = document.getElementById('summary-payment'); // Summary Payment
         const modalDueRemaining = document.getElementById('modal-due-remaining');
         const processDuePaymentBtn = document.getElementById('process-due-payment-btn');
         const paymentReceiptSection = document.getElementById('payment-receipt-section');
@@ -6686,6 +7135,17 @@
             } else if (sectionId === 'expenses') { // NEW Expense Report
                  renderExpenseReport();
                  populateExpenseReportCategoryFilter();
+            } else if (sectionId === 'lc') { // LC Module
+                 renderLCTransactions();
+                 populateLCBankSelector();
+                 const today = new Date().toISOString().split('T')[0];
+                 document.getElementById('lc-date').value = today;
+            } else if (sectionId === 'lc-payment') { // LC Payment Section
+                 updateLCPaymentSummary();
+                 populateQuickLCPaymentDropdown();
+                 renderLCPaymentHistory();
+                 const today = new Date().toISOString().split('T')[0];
+                 document.getElementById('quick-lc-pay-date').value = today;
             } else if (sectionId === 'customer-data') {
                 customerSearchInput.value = '';
                 customerSearchResultsDiv.style.display = 'none';
@@ -6866,6 +7326,8 @@
             document.getElementById('nav-returns').style.display = 'list-item';
             document.getElementById('nav-ledger').style.display = 'list-item'; // Cash Ledger
             document.getElementById('nav-finance').style.display = 'list-item'; // NEW Bank
+            document.getElementById('nav-lc').style.display = 'list-item'; // LC Module
+            document.getElementById('nav-lc-payment').style.display = 'list-item'; // LC Payment
             document.getElementById('nav-expenses').style.display = 'list-item'; // NEW Expenses
             document.getElementById('nav-customer-data').style.display = 'list-item';
             document.getElementById('nav-customer-management').style.display = 'list-item';
@@ -6882,6 +7344,8 @@
                  // Hide Manual Due Entry/Bank/Expense for sellers for safety
                  document.getElementById('nav-manual-dues').style.display = 'none';
                  document.getElementById('nav-finance').style.display = 'none';
+                 document.getElementById('nav-lc').style.display = 'none'; // LC Module
+                 document.getElementById('nav-lc-payment').style.display = 'none'; // LC Payment
                  document.getElementById('nav-expenses').style.display = 'none';
                  document.getElementById('nav-ledger').style.display = 'none';
             }
@@ -9321,6 +9785,20 @@
                              <p style="margin: 0; border-top: 2px double #000; font-weight: bold; padding-top: 3px;">Net Amount : ${Math.abs(finalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                         </div>
                     </div>
+                    
+                    <!-- Payment Method Display - Compact -->
+                    <div style="margin-top: 10px; padding: 5px 10px; border: 1px solid #000; display: inline-block; font-size: 11px;">
+                        <strong>Payment:</strong> 
+                        <span style="margin-left: 10px;">
+                            ${sale.paymentMethod === 'due' ? '<span style="background: #fff3cd; padding: 2px 8px; border: 1px solid #000;">✓ বাকি (Due)</span>' : '<span style="color: #999;">✗ বাকি</span>'}
+                        </span>
+                        <span style="margin-left: 5px;">
+                            ${sale.paymentMethod === 'cash' ? '<span style="background: #d4edda; padding: 2px 8px; border: 1px solid #000;">✓ নগদ (Cash)</span>' : '<span style="color: #999;">✗ নগদ</span>'}
+                        </span>
+                        <span style="margin-left: 5px;">
+                            ${sale.paymentMethod === 'bank' ? '<span style="background: #d1ecf1; padding: 2px 8px; border: 1px solid #000;">✓ ব্যাংক (Bank)</span>' : '<span style="color: #999;">✗ ব্যাংক</span>'}
+                        </span>
+                    </div>
 
                     <div style="margin-top: 50px; display: flex; justify-content: space-around;">
                         <div style="width: 20%; text-align: center; border-top: 1px solid #000; padding-top: 5px;">Prepared By (${sellerName})</div>
@@ -9843,6 +10321,7 @@
             paymentAmountInput.value = due.remainingAmount;
             paymentAmountInput.max = totalCustomerDue;
             paymentMethodDueSelect.value = 'cash';
+            dueDiscountInput.value = 0; // Reset discount
             dueBankSelectContainer.style.display = 'none';
             updateModalRemainingDue();
             paymentReceiptSection.style.display = 'none';
@@ -9866,23 +10345,35 @@
         });
 
         paymentAmountInput.addEventListener('input', updateModalRemainingDue);
+        dueDiscountInput.addEventListener('input', updateModalRemainingDue); // Discount change listener
 
         function updateModalRemainingDue() {
             if (!currentDueForPayment) return;
             const customer = customers.find(c => c.id === currentDueForPayment.customerId || c.phone === currentDueForPayment.customerPhone);
             if (!customer) return;
             
-             const totalCustomerDue = customer.currentDue;
+            const totalCustomerDue = customer.currentDue;
             const paidAmount = parseFloat(paymentAmountInput.value) || 0;
-            const remaining = totalCustomerDue - paidAmount;
+            const discountAmount = parseFloat(dueDiscountInput.value) || 0;
+            
+            // Calculate remaining: Total - (Payment + Discount)
+            const totalDeduction = paidAmount + discountAmount;
+            const remaining = totalCustomerDue - totalDeduction;
+            
+            // Update summary display
+            if (summaryTotalDue) summaryTotalDue.textContent = `৳ ${totalCustomerDue.toLocaleString()}`;
+            if (summaryDiscount) summaryDiscount.textContent = `৳ ${discountAmount.toLocaleString()}`;
+            if (summaryPayment) summaryPayment.textContent = `৳ ${paidAmount.toLocaleString()}`;
+            
             modalDueRemaining.textContent = `৳ ${Math.max(0, remaining).toLocaleString()}`;
-            modalDueRemaining.style.color = remaining > 0 ? 'red' : 'green';
+            modalDueRemaining.style.color = remaining > 0 ? '#dc3545' : '#10b981';
         }
 
         processDuePaymentBtn.addEventListener('click', async () => {
             if (!currentDueForPayment) return;
 
             let paidAmount = parseFloat(paymentAmountInput.value);
+            const discountAmount = parseFloat(dueDiscountInput.value) || 0; // Get discount
             const paymentMethod = paymentMethodDueSelect.value;
             const selectedBankId = dueBankSelect.value;
             let selectedBank = null;
@@ -11369,6 +11860,893 @@
                  <p class="right"><strong>Grand Total Expense: ৳ ${totalGrandExpenseSpan.textContent.replace('৳ ', '')}</strong></p>
             `;
             launchPrint('Expense রিপোর্ট', printContent);
+        });
+
+        // ==========================================
+        // LC MODULE FUNCTIONS
+        // ==========================================
+        
+        // Populate LC Payment Modal Bank Selector
+        function populateLCPayBankSelector() {
+            const lcPayBankSelect = document.getElementById('lc-pay-bank-select');
+            if (!lcPayBankSelect) return;
+            
+            lcPayBankSelect.innerHTML = '<option value="">-- ব্যাংক নির্বাচন করুন --</option>';
+            
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                option.value = bank.id;
+                const balance = bank.currentBalance || 0;
+                option.textContent = `${bank.name} (৳${balance.toLocaleString()})`;
+                lcPayBankSelect.appendChild(option);
+            });
+        }
+        
+        // Render LC List
+        function renderLCTransactions() {
+            const lcListTableBody = document.querySelector('#lc-list-table tbody');
+            if (!lcListTableBody) return;
+            
+            lcListTableBody.innerHTML = '';
+            
+            const fromDateStr = document.getElementById('lc-report-from-date').value;
+            const toDateStr = document.getElementById('lc-report-to-date').value;
+            const filterLCNumber = document.getElementById('lc-report-number').value.trim().toLowerCase();
+            
+            let filteredLCs = [...lcTransactions];
+            
+            // Filter by date range
+            if (fromDateStr) {
+                filteredLCs = filteredLCs.filter(lc => lc.date >= fromDateStr);
+            }
+            if (toDateStr) {
+                filteredLCs = filteredLCs.filter(lc => lc.date <= toDateStr);
+            }
+            
+            // Filter by LC number
+            if (filterLCNumber) {
+                filteredLCs = filteredLCs.filter(lc => 
+                    lc.lcNumber.toLowerCase().includes(filterLCNumber)
+                );
+            }
+            
+            // Sort by date (newest first)
+            filteredLCs.sort((a, b) => new Date(b.createdAt || b.date) - new Date(a.createdAt || a.date));
+            
+            filteredLCs.forEach(lc => {
+                const totalDue = lc.totalDue || 0;
+                const paidAmount = lc.paidAmount || 0;
+                const remainingDue = totalDue - paidAmount;
+                
+                const row = lcListTableBody.insertRow();
+                
+                // LC Number
+                const lcNumberCell = row.insertCell(0);
+                lcNumberCell.textContent = lc.lcNumber;
+                lcNumberCell.style.fontWeight = 'bold';
+                lcNumberCell.style.color = '#8b5cf6';
+                
+                // Date
+                const dateCell = row.insertCell(1);
+                dateCell.textContent = lc.date;
+                
+                // Total Due Amount
+                const totalCell = row.insertCell(2);
+                totalCell.textContent = `৳ ${totalDue.toLocaleString()}`;
+                totalCell.style.fontWeight = 'bold';
+                
+                // Paid Amount
+                const paidCell = row.insertCell(3);
+                paidCell.textContent = `৳ ${paidAmount.toLocaleString()}`;
+                paidCell.style.color = '#10b981';
+                paidCell.style.fontWeight = 'bold';
+                
+                // Remaining Due Amount
+                const dueCell = row.insertCell(4);
+                dueCell.textContent = `৳ ${remainingDue.toLocaleString()}`;
+                dueCell.style.color = remainingDue > 0 ? '#dc3545' : '#10b981';
+                dueCell.style.fontWeight = 'bold';
+                
+                // Description
+                const descCell = row.insertCell(5);
+                descCell.textContent = lc.description || '-';
+                
+                // Actions
+                const actionCell = row.insertCell(6);
+                if (remainingDue > 0) {
+                    actionCell.innerHTML = `
+                        <button class="lc-pay-btn" data-lc-id="${lc.id}" style="padding: 6px 12px; font-size: 13px; background: #10b981; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;" title="পেমেন্ট করুন">
+                            <i class="fas fa-money-bill-wave"></i> পেমেন্ট
+                        </button>
+                        <button class="lc-edit-due-btn" data-lc-id="${lc.id}" style="padding: 6px 12px; font-size: 13px; background: #f59e0b; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;" title="বকেয়া এডিট করুন">
+                            <i class="fas fa-edit"></i> এডিট
+                        </button>
+                        <button class="lc-delete-btn" data-lc-id="${lc.id}" style="padding: 6px 12px; font-size: 13px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;" title="মুছে ফেলুন">
+                            <i class="fas fa-trash"></i> ডিলিট
+                        </button>
+                    `;
+                } else {
+                    actionCell.innerHTML = `
+                        <span style="color: #10b981; margin-right: 10px;"><i class="fas fa-check-circle"></i> সম্পূর্ণ</span>
+                        <button class="lc-edit-due-btn" data-lc-id="${lc.id}" style="padding: 6px 12px; font-size: 13px; background: #f59e0b; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px;" title="বকেয়া এডিট করুন">
+                            <i class="fas fa-edit"></i> এডিট
+                        </button>
+                        <button class="lc-delete-btn" data-lc-id="${lc.id}" style="padding: 6px 12px; font-size: 13px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;" title="মুছে ফেলুন">
+                            <i class="fas fa-trash"></i> ডিলিট
+                        </button>
+                    `;
+                }
+            });
+            
+            // Update summary cards
+            const totalCount = lcTransactions.length;
+            const totalDue = lcTransactions.reduce((sum, lc) => sum + (lc.totalDue || 0), 0);
+            const totalPaid = lcTransactions.reduce((sum, lc) => sum + (lc.paidAmount || 0), 0);
+            const totalRemaining = totalDue - totalPaid;
+            
+            const totalCountEl = document.getElementById('lc-total-count');
+            const totalAmountEl = document.getElementById('lc-total-amount');
+            const totalPaidEl = document.getElementById('lc-total-paid');
+            const totalDueEl = document.getElementById('lc-total-due');
+            
+            if (totalCountEl) totalCountEl.textContent = totalCount;
+            if (totalAmountEl) totalAmountEl.textContent = `৳ ${totalDue.toLocaleString()}`;
+            if (totalPaidEl) totalPaidEl.textContent = `৳ ${totalPaid.toLocaleString()}`;
+            if (totalDueEl) totalDueEl.textContent = `৳ ${totalRemaining.toLocaleString()}`;
+            
+            // Also update LC Payment section if visible
+            updateLCPaymentSummary();
+            populateQuickLCPaymentDropdown();
+            renderLCPaymentHistory();
+        }
+        
+        // Add New LC
+        async function addNewLC(e) {
+            e.preventDefault();
+            
+            const lcNumber = document.getElementById('lc-number').value.trim();
+            const lcDate = document.getElementById('lc-date').value;
+            const lcInitialDue = parseFloat(document.getElementById('lc-initial-due').value) || 0;
+            const lcDescription = document.getElementById('lc-description').value.trim();
+            
+            // Validation
+            if (!lcNumber || !lcDate) {
+                alert('অনুগ্রহ করে LC নম্বর এবং তারিখ লিখুন।');
+                return;
+            }
+            
+            // Check if LC number already exists
+            const existingLC = lcTransactions.find(lc => lc.lcNumber.toLowerCase() === lcNumber.toLowerCase());
+            if (existingLC) {
+                if (!confirm('এই LC নম্বর ইতিমধ্যে বিদ্যমান। আপনি কি এটি যোগ করতে চান?')) {
+                    return;
+                }
+            }
+            
+            // Create LC object
+            const newLC = {
+                id: Date.now().toString(),
+                lcNumber: lcNumber,
+                date: lcDate,
+                totalDue: lcInitialDue, // Total due amount (can be edited anytime)
+                paidAmount: 0,
+                description: lcDescription,
+                payments: [], // Array to track all payments
+                edits: [], // Array to track due amount edits
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                // Save to Firebase
+                await db.add('lcTransactions', newLC);
+                
+                // Add to local array
+                lcTransactions.push(newLC);
+                
+                // Refresh UI
+                renderLCTransactions();
+                
+                // Reset form
+                document.getElementById('lc-add-form').reset();
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('lc-date').value = today;
+                
+                alert('LC সফলভাবে সংরক্ষিত হয়েছে!\nএখন আপনি বকেয়া এডিট বা পেমেন্ট করতে পারবেন।');
+                
+            } catch (error) {
+                console.error('Error adding LC:', error);
+                alert('LC সংরক্ষণে ত্রুটি হয়েছে।');
+            }
+        }
+        
+        // Open LC Payment Modal
+        function openLCPaymentModal(lcId) {
+            const lc = lcTransactions.find(l => l.id === lcId);
+            if (!lc) {
+                alert('LC খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            const totalDue = lc.totalDue || 0;
+            const paidAmount = lc.paidAmount || 0;
+            const remainingDue = totalDue - paidAmount;
+            
+            // Fill modal data
+            document.getElementById('lc-pay-id').value = lc.id;
+            document.getElementById('lc-pay-number').textContent = lc.lcNumber;
+            document.getElementById('lc-pay-total').textContent = `৳ ${totalDue.toLocaleString()}`;
+            document.getElementById('lc-pay-paid').textContent = `৳ ${paidAmount.toLocaleString()}`;
+            document.getElementById('lc-pay-due').textContent = `৳ ${remainingDue.toLocaleString()}`;
+            
+            // Set default values for payment form
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('lc-pay-date').value = today;
+            document.getElementById('lc-pay-amount').value = '';
+            document.getElementById('lc-pay-amount').max = remainingDue;
+            document.getElementById('lc-pay-source').value = '';
+            document.getElementById('lc-pay-note').value = '';
+            document.getElementById('lc-pay-bank-group').style.display = 'none';
+            
+            // Populate bank selector
+            populateLCPayBankSelector();
+            
+            // Show modal
+            document.getElementById('lc-payment-modal').style.display = 'flex';
+        }
+        
+        // Open LC Edit Due Modal
+        function openLCEditDueModal(lcId) {
+            const lc = lcTransactions.find(l => l.id === lcId);
+            if (!lc) {
+                alert('LC খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            const totalDue = lc.totalDue || 0;
+            
+            // Fill modal data
+            document.getElementById('lc-edit-id').value = lc.id;
+            document.getElementById('lc-edit-number').textContent = lc.lcNumber;
+            document.getElementById('lc-edit-current-due').textContent = `৳ ${totalDue.toLocaleString()}`;
+            document.getElementById('lc-edit-total-due').value = totalDue || '';
+            document.getElementById('lc-edit-reason').value = '';
+            
+            // Show modal
+            document.getElementById('lc-edit-due-modal').style.display = 'flex';
+        }
+        
+        // Process LC Payment
+        async function processLCPayment(e) {
+            e.preventDefault();
+            
+            const lcId = document.getElementById('lc-pay-id').value;
+            const paymentAmount = parseFloat(document.getElementById('lc-pay-amount').value);
+            const paymentDate = document.getElementById('lc-pay-date').value;
+            const paymentSource = document.getElementById('lc-pay-source').value;
+            const bankId = document.getElementById('lc-pay-bank-select').value;
+            const paymentNote = document.getElementById('lc-pay-note').value.trim();
+            
+            // Validation
+            if (!paymentAmount || paymentAmount <= 0) {
+                alert('বৈধ পেমেন্ট পরিমাণ লিখুন।');
+                return;
+            }
+            
+            if (!paymentDate) {
+                alert('পেমেন্ট তারিখ নির্বাচন করুন।');
+                return;
+            }
+            
+            if (!paymentSource) {
+                alert('পেমেন্ট উৎস নির্বাচন করুন।');
+                return;
+            }
+            
+            if (paymentSource === 'bank' && !bankId) {
+                alert('অনুগ্রহ করে ব্যাংক নির্বাচন করুন।');
+                return;
+            }
+            
+            const lc = lcTransactions.find(l => l.id === lcId);
+            if (!lc) {
+                alert('LC খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            const totalDue = lc.totalDue || 0;
+            const paidAmount = lc.paidAmount || 0;
+            const remainingDue = totalDue - paidAmount;
+            
+            if (paymentAmount > remainingDue) {
+                if (!confirm(`পেমেন্ট পরিমাণ (৳ ${paymentAmount.toLocaleString()}) বকেয়ার (৳ ${remainingDue.toLocaleString()}) চেয়ে বেশি। আপনি কি এটি সেভ করতে চান?`)) {
+                    return;
+                }
+            }
+            
+            try {
+                // Deduct from Bank or Cash
+                if (paymentSource === 'bank') {
+                    const bank = banks.find(b => b.id === bankId);
+                    if (bank) {
+                        bank.currentBalance -= paymentAmount;
+                        await db.put('banks', bank);
+                        
+                        // Create bank transaction
+                        const bankTx = {
+                            id: Date.now().toString(),
+                            bankId: bankId,
+                            date: paymentDate,
+                            type: 'debit',
+                            amount: paymentAmount,
+                            description: `LC Payment - ${lc.lcNumber}${paymentNote ? ' - ' + paymentNote : ''}`,
+                            category: 'lc_payment',
+                            timestamp: new Date().toISOString()
+                        };
+                        await db.add('bankTransactions', bankTx);
+                        bankTransactions.push(bankTx);
+                    }
+                } else if (paymentSource === 'cash') {
+                    // Create ledger entry for cash deduction
+                    const ledgerEntry = {
+                        id: Date.now().toString(),
+                        date: paymentDate,
+                        type: 'expense',
+                        category: 'lc_payment',
+                        description: `LC Payment - ${lc.lcNumber}${paymentNote ? ' - ' + paymentNote : ''}`,
+                        amount: paymentAmount,
+                        timestamp: new Date().toISOString()
+                    };
+                    await db.add('ledgerEntries', ledgerEntry);
+                    ledgerEntries.push(ledgerEntry);
+                }
+                
+                // Update LC with payment
+                const payment = {
+                    id: Date.now().toString(),
+                    amount: paymentAmount,
+                    date: paymentDate,
+                    source: paymentSource,
+                    bankId: paymentSource === 'bank' ? bankId : null,
+                    note: paymentNote,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (!lc.payments) lc.payments = [];
+                lc.payments.push(payment);
+                lc.paidAmount = (lc.paidAmount || 0) + paymentAmount;
+                
+                await db.put('lcTransactions', lc);
+                
+                // Refresh UI
+                renderLCTransactions();
+                renderLedger();
+                renderBankList();
+                renderBankTransactions();
+                
+                // Close modal
+                document.getElementById('lc-payment-modal').style.display = 'none';
+                
+                alert('LC পেমেন্ট সফলভাবে সংরক্ষিত হয়েছে!');
+                
+            } catch (error) {
+                console.error('Error processing LC payment:', error);
+                alert('LC পেমেন্ট সংরক্ষণে ত্রুটি হয়েছে।');
+            }
+        }
+        
+        // Edit LC Due Amount
+        async function editLCDueAmount(e) {
+            e.preventDefault();
+            
+            const lcId = document.getElementById('lc-edit-id').value;
+            const newTotalDue = parseFloat(document.getElementById('lc-edit-total-due').value);
+            const editReason = document.getElementById('lc-edit-reason').value.trim();
+            
+            // Validation
+            if (!newTotalDue || newTotalDue < 0) {
+                alert('বৈধ বকেয়া পরিমাণ লিখুন।');
+                return;
+            }
+            
+            const lc = lcTransactions.find(l => l.id === lcId);
+            if (!lc) {
+                alert('LC খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            const oldTotalDue = lc.totalDue || 0;
+            
+            try {
+                // Record the edit
+                const edit = {
+                    id: Date.now().toString(),
+                    oldDue: oldTotalDue,
+                    newDue: newTotalDue,
+                    difference: newTotalDue - oldTotalDue,
+                    reason: editReason,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (!lc.edits) lc.edits = [];
+                lc.edits.push(edit);
+                
+                // Update total due
+                lc.totalDue = newTotalDue;
+                
+                await db.put('lcTransactions', lc);
+                
+                // Refresh UI
+                renderLCTransactions();
+                
+                // Close modal
+                document.getElementById('lc-edit-due-modal').style.display = 'none';
+                
+                alert(`LC বকেয়া আপডেট হয়েছে!\nপুরাতন: ৳${oldTotalDue.toLocaleString()}\nনতুন: ৳${newTotalDue.toLocaleString()}`);
+                
+            } catch (error) {
+                console.error('Error editing LC due:', error);
+                alert('LC বকেয়া আপডেটে ত্রুটি হয়েছে।');
+            }
+        }
+        
+        // Delete LC
+        async function deleteLC(lcId) {
+            if (!confirm('আপনি কি নিশ্চিত যে এই LC মুছে ফেলতে চান?')) {
+                return;
+            }
+            
+            try {
+                const lcIndex = lcTransactions.findIndex(lc => lc.id === lcId);
+                if (lcIndex === -1) {
+                    alert('LC খুঁজে পাওয়া যায়নি।');
+                    return;
+                }
+                
+                const lc = lcTransactions[lcIndex];
+                
+                // If there are payments, reverse them
+                if (lc.payments && lc.payments.length > 0) {
+                    for (const payment of lc.payments) {
+                        if (payment.source === 'bank' && payment.bankId) {
+                            const bank = banks.find(b => b.id === payment.bankId);
+                            if (bank) {
+                                bank.currentBalance += payment.amount;
+                                await db.put('banks', bank);
+                            }
+                        } else if (payment.source === 'cash') {
+                            const ledgerEntry = {
+                                id: Date.now().toString(),
+                                date: payment.date,
+                                type: 'income',
+                                category: 'lc_refund',
+                                description: `LC Refund - ${lc.lcNumber}`,
+                                amount: payment.amount,
+                                timestamp: new Date().toISOString()
+                            };
+                            await db.add('ledgerEntries', ledgerEntry);
+                            ledgerEntries.push(ledgerEntry);
+                        }
+                    }
+                }
+                
+                // Delete from Firebase
+                await db.delete('lcTransactions', lcId);
+                
+                // Remove from local array
+                lcTransactions.splice(lcIndex, 1);
+                
+                // Refresh UI
+                renderLCTransactions();
+                renderLedger();
+                renderBankList();
+                renderBankTransactions();
+                
+                alert('LC সফলভাবে মুছে ফেলা হয়েছে!');
+                
+            } catch (error) {
+                console.error('Error deleting LC:', error);
+                alert('LC মুছে ফেলতে ত্রুটি হয়েছে।');
+            }
+        }
+        
+        // Print LC Report
+        function printLCReport() {
+            const fromDate = document.getElementById('lc-report-from-date').value || 'শুরু';
+            const toDate = document.getElementById('lc-report-to-date').value || 'শেষ';
+            const lcNumber = document.getElementById('lc-report-number').value || 'সকল';
+            
+            const totalAmount = lcTransactions.reduce((sum, lc) => sum + (lc.totalAmount || 0), 0);
+            const totalPaid = lcTransactions.reduce((sum, lc) => sum + (lc.paidAmount || 0), 0);
+            const totalDue = totalAmount - totalPaid;
+            
+            const printContent = `
+                <h2 style="text-align: center; color: #8b5cf6;">LC Module Report</h2>
+                <p style="text-align: center; font-size: 14px; margin: 10px 0;">
+                    তারিখ: ${fromDate} থেকে ${toDate}<br>
+                    LC নম্বর: ${lcNumber}
+                </p>
+                <hr style="border: 1px solid #8b5cf6; margin: 15px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead>
+                        <tr style="background: #8b5cf6; color: white;">
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">LC নম্বর</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">তারিখ</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">মোট</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">পরিশোধিত</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">বকেয়া</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${document.querySelector('#lc-list-table tbody').innerHTML}
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f3f4f6; font-weight: bold;">
+                            <td colspan="2" style="padding: 8px; border: 1px solid #ddd; text-align: right;">মোট:</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">৳ ${totalAmount.toLocaleString()}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">৳ ${totalPaid.toLocaleString()}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">৳ ${totalDue.toLocaleString()}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <hr style="border: 1px solid #8b5cf6; margin: 15px 0;">
+                <p style="text-align: right; font-size: 12px; color: #666;">
+                    প্রিন্ট তারিখ: ${new Date().toLocaleDateString('bn-BD')}
+                </p>
+            `;
+            
+            launchPrint('LC রিপোর্ট', printContent);
+        }
+        
+        // --- LC Payment Section Functions ---
+        function populateQuickLCPaymentDropdown() {
+            const lcSelect = document.getElementById('quick-lc-select');
+            if (!lcSelect) {
+                console.error('quick-lc-select element not found!');
+                return;
+            }
+            
+            console.log('=== POPULATING LC DROPDOWN ===');
+            console.log('Total LCs in system:', lcTransactions.length);
+            console.log('All LCs:', lcTransactions);
+            
+            lcSelect.innerHTML = '<option value="">-- LC নির্বাচন করুন --</option>';
+            
+            // Only show LCs with remaining due
+            const lcsWithDue = lcTransactions.filter(lc => {
+                const totalDue = lc.totalDue || 0;
+                const paidAmount = lc.paidAmount || 0;
+                const remaining = totalDue - paidAmount;
+                return remaining > 0;
+            });
+            
+            console.log('LCs with remaining due:', lcsWithDue.length);
+            console.log('LCs with due details:', lcsWithDue);
+            
+            if (lcsWithDue.length === 0) {
+                console.warn('No LCs with remaining due found!');
+                if (lcTransactions.length === 0) {
+                    console.warn('No LCs exist. Please add LCs first in LC Module.');
+                } else {
+                    console.warn('All LCs are fully paid. No remaining due.');
+                }
+            }
+            
+            lcsWithDue.forEach(lc => {
+                const totalDue = lc.totalDue || 0;
+                const paidAmount = lc.paidAmount || 0;
+                const remaining = totalDue - paidAmount;
+                
+                const option = document.createElement('option');
+                option.value = lc.id;
+                option.textContent = `${lc.lcNumber} (বকেয়া: ৳${remaining.toLocaleString()})`;
+                lcSelect.appendChild(option);
+                
+                console.log(`Added to dropdown: ${lc.lcNumber} - ID: ${lc.id}`);
+            });
+            
+            // Populate bank dropdown
+            populateQuickLCBankSelector();
+        }
+        
+        function populateQuickLCBankSelector() {
+            const bankSelect = document.getElementById('quick-lc-bank-select');
+            if (!bankSelect) {
+                console.error('quick-lc-bank-select element not found!');
+                return;
+            }
+            
+            console.log('=== POPULATING BANK DROPDOWN ===');
+            console.log('Total banks in system:', banks.length);
+            console.log('All banks:', banks);
+            
+            bankSelect.innerHTML = '<option value="">-- ব্যাংক নির্বাচন করুন --</option>';
+            
+            if (banks.length === 0) {
+                console.warn('No banks found! Please add banks in Bank Module first.');
+            }
+            
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                option.value = bank.id;
+                const balance = bank.currentBalance || 0;
+                option.textContent = `${bank.name} (৳${balance.toLocaleString()})`;
+                bankSelect.appendChild(option);
+                
+                console.log(`Added bank: ${bank.name} - Balance: ৳${balance.toLocaleString()}`);
+            });
+        }
+        
+        function updateLCPaymentSummary() {
+            const totalCount = lcTransactions.length;
+            const totalDue = lcTransactions.reduce((sum, lc) => sum + (lc.totalDue || 0), 0);
+            const totalPaid = lcTransactions.reduce((sum, lc) => sum + (lc.paidAmount || 0), 0);
+            const remaining = totalDue - totalPaid;
+            
+            const totalCountEl = document.getElementById('lc-pay-total-count');
+            const totalDueEl = document.getElementById('lc-pay-total-due');
+            const totalPaidEl = document.getElementById('lc-pay-total-paid');
+            const remainingEl = document.getElementById('lc-pay-remaining-due');
+            
+            if (totalCountEl) totalCountEl.textContent = totalCount;
+            if (totalDueEl) totalDueEl.textContent = `৳ ${totalDue.toLocaleString()}`;
+            if (totalPaidEl) totalPaidEl.textContent = `৳ ${totalPaid.toLocaleString()}`;
+            if (remainingEl) remainingEl.textContent = `৳ ${remaining.toLocaleString()}`;
+        }
+        
+        function renderLCPaymentHistory() {
+            const tableBody = document.querySelector('#lc-payment-history-table tbody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            const fromDateStr = document.getElementById('lc-payment-from-date').value;
+            const toDateStr = document.getElementById('lc-payment-to-date').value;
+            const filterLCNumber = document.getElementById('lc-payment-filter-lc').value.trim().toLowerCase();
+            
+            // Collect all payments from all LCs
+            let allPayments = [];
+            lcTransactions.forEach(lc => {
+                if (lc.payments && lc.payments.length > 0) {
+                    lc.payments.forEach(payment => {
+                        allPayments.push({
+                            ...payment,
+                            lcNumber: lc.lcNumber,
+                            lcId: lc.id
+                        });
+                    });
+                }
+            });
+            
+            // Sort by date (newest first)
+            allPayments.sort((a, b) => new Date(b.date || b.timestamp) - new Date(a.date || a.timestamp));
+            
+            // Filter by date range
+            if (fromDateStr) {
+                allPayments = allPayments.filter(p => p.date >= fromDateStr);
+            }
+            if (toDateStr) {
+                allPayments = allPayments.filter(p => p.date <= toDateStr);
+            }
+            
+            // Filter by LC number
+            if (filterLCNumber) {
+                allPayments = allPayments.filter(p => 
+                    p.lcNumber.toLowerCase().includes(filterLCNumber)
+                );
+            }
+            
+            allPayments.forEach(payment => {
+                const row = tableBody.insertRow();
+                
+                // Date
+                const dateCell = row.insertCell(0);
+                dateCell.textContent = payment.date || '-';
+                
+                // LC Number
+                const lcCell = row.insertCell(1);
+                lcCell.textContent = payment.lcNumber;
+                lcCell.style.fontWeight = 'bold';
+                lcCell.style.color = '#8b5cf6';
+                
+                // Payment Amount
+                const amountCell = row.insertCell(2);
+                amountCell.textContent = `৳ ${payment.amount.toLocaleString()}`;
+                amountCell.style.fontWeight = 'bold';
+                amountCell.style.color = '#10b981';
+                
+                // Payment Source
+                const sourceCell = row.insertCell(3);
+                sourceCell.textContent = payment.source === 'bank' ? 'ব্যাংক' : 'Cash Ledger';
+                
+                // Bank/Cash Name
+                const bankCell = row.insertCell(4);
+                if (payment.source === 'bank' && payment.bankId) {
+                    const bank = banks.find(b => b.id === payment.bankId);
+                    bankCell.textContent = bank ? bank.name : '-';
+                } else {
+                    bankCell.textContent = 'Cash';
+                }
+                
+                // Note
+                const noteCell = row.insertCell(5);
+                noteCell.textContent = payment.note || '-';
+            });
+        }
+        
+        // Quick LC Payment Form Submit
+        async function processQuickLCPayment(e) {
+            e.preventDefault();
+            
+            const lcId = document.getElementById('quick-lc-select').value;
+            const amount = parseFloat(document.getElementById('quick-lc-pay-amount').value);
+            const date = document.getElementById('quick-lc-pay-date').value;
+            const source = document.getElementById('quick-lc-pay-source').value;
+            const bankId = document.getElementById('quick-lc-bank-select').value;
+            const note = document.getElementById('quick-lc-pay-note').value.trim();
+            
+            // Validation
+            if (!lcId || !amount || amount <= 0 || !date || !source) {
+                alert('অনুগ্রহ করে সকল প্রয়োজনীয় ফিল্ড পূরণ করুন।');
+                return;
+            }
+            
+            if (source === 'bank' && !bankId) {
+                alert('অনুগ্রহ করে ব্যাংক নির্বাচন করুন।');
+                return;
+            }
+            
+            // Find LC
+            const lc = lcTransactions.find(l => l.id === lcId);
+            if (!lc) {
+                alert('LC খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+            
+            // Check if amount exceeds remaining due
+            const totalDue = lc.totalDue || 0;
+            const paidAmount = lc.paidAmount || 0;
+            const remainingDue = totalDue - paidAmount;
+            
+            if (amount > remainingDue) {
+                alert(`পেমেন্টের পরিমাণ অবশিষ্ট বকেয়া (৳${remainingDue.toLocaleString()}) থেকে বেশি হতে পারবে না।`);
+                return;
+            }
+            
+            // Create payment record
+            const payment = {
+                id: Date.now().toString(),
+                amount: amount,
+                date: date,
+                source: source,
+                bankId: source === 'bank' ? bankId : null,
+                note: note,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Update LC
+            if (!lc.payments) lc.payments = [];
+            lc.payments.push(payment);
+            lc.paidAmount = paidAmount + amount;
+            
+            // Save to database
+            try {
+                await db.put('lcTransactions', lc);
+                
+                // Deduct from bank or cash ledger
+                if (source === 'bank') {
+                    const bank = banks.find(b => b.id === bankId);
+                    if (bank) {
+                        bank.currentBalance -= amount;
+                        await db.put('banks', bank);
+                    }
+                } else {
+                    // Add to cash ledger as expense
+                    const ledgerEntry = {
+                        id: Date.now().toString(),
+                        date: date,
+                        type: 'expense',
+                        category: 'lc_payment',
+                        description: `LC পেমেন্ট - ${lc.lcNumber}`,
+                        amount: amount,
+                        reference: `LC-${lc.lcNumber}`,
+                        timestamp: new Date().toISOString()
+                    };
+                    await db.add('ledgerEntries', ledgerEntry);
+                }
+                
+                alert('LC পেমেন্ট সফলভাবে সংরক্ষিত হয়েছে!');
+                
+                // Reset form
+                document.getElementById('quick-lc-payment-form').reset();
+                document.getElementById('quick-lc-bank-group').style.display = 'none';
+                
+                // Refresh UI
+                renderLCTransactions();
+                renderLCPaymentHistory();
+                updateLCPaymentSummary();
+                populateQuickLCPaymentDropdown();
+                
+            } catch (error) {
+                console.error('Error saving LC payment:', error);
+                alert('পেমেন্ট সংরক্ষণে ত্রুটি হয়েছে।');
+            }
+        }
+        
+        // Event Listeners for LC Payment Section
+        document.getElementById('quick-lc-payment-form').addEventListener('submit', processQuickLCPayment);
+        
+        document.getElementById('quick-lc-pay-source').addEventListener('change', function() {
+            const bankGroup = document.getElementById('quick-lc-bank-group');
+            if (this.value === 'bank') {
+                bankGroup.style.display = 'block';
+            } else {
+                bankGroup.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('filter-lc-payment-history').addEventListener('click', renderLCPaymentHistory);
+        
+        document.getElementById('print-lc-payment-history').addEventListener('click', function() {
+            const table = document.getElementById('lc-payment-history-table');
+            if (!table || table.querySelectorAll('tbody tr').length === 0) {
+                alert('প্রিন্ট করার জন্য কোনো ডেটা নেই।');
+                return;
+            }
+            
+            const printContent = `
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2 style="text-align: center; color: #8b5cf6;">LC পেমেন্ট রিপোর্ট</h2>
+                    <hr style="border: 2px solid #8b5cf6; margin: 20px 0;">
+                    ${table.outerHTML}
+                    <hr style="border: 1px solid #8b5cf6; margin: 15px 0;">
+                    <p style="text-align: right; font-size: 12px; color: #666;">
+                        প্রিন্ট তারিখ: ${new Date().toLocaleDateString('bn-BD')}
+                    </p>
+                </div>
+            `;
+            
+            launchPrint('LC পেমেন্ট রিপোর্ট', printContent);
+        });
+        document.getElementById('lc-add-form').addEventListener('submit', addNewLC);
+        
+        document.getElementById('filter-lc-report').addEventListener('click', renderLCTransactions);
+        
+        document.getElementById('print-lc-report').addEventListener('click', printLCReport);
+        
+        // LC Payment Modal Events
+        document.getElementById('lc-pay-source').addEventListener('change', function() {
+            const bankGroup = document.getElementById('lc-pay-bank-group');
+            if (this.value === 'bank') {
+                bankGroup.style.display = 'block';
+            } else {
+                bankGroup.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('lc-payment-form').addEventListener('submit', processLCPayment);
+        
+        document.getElementById('lc-edit-due-form').addEventListener('submit', editLCDueAmount);
+        
+        document.getElementById('close-lc-payment-modal').addEventListener('click', function() {
+            document.getElementById('lc-payment-modal').style.display = 'none';
+        });
+        
+        document.getElementById('close-lc-edit-due-modal').addEventListener('click', function() {
+            document.getElementById('lc-edit-due-modal').style.display = 'none';
+        });
+        
+        // Event delegation for LC list table buttons
+        document.querySelector('#lc-list-table tbody').addEventListener('click', function(e) {
+            if (e.target.closest('.lc-pay-btn')) {
+                const lcId = e.target.closest('.lc-pay-btn').dataset.lcId;
+                openLCPaymentModal(lcId);
+            } else if (e.target.closest('.lc-edit-due-btn')) {
+                const lcId = e.target.closest('.lc-edit-due-btn').dataset.lcId;
+                openLCEditDueModal(lcId);
+            } else if (e.target.closest('.lc-delete-btn')) {
+                const lcId = e.target.closest('.lc-delete-btn').dataset.lcId;
+                deleteLC(lcId);
+            }
         });
 
         // --- Customer Data Management (Original) ---
