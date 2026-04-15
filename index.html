@@ -6179,6 +6179,46 @@
         </div>
     </div>
     
+    <!-- Advance Payment Modal -->
+    <div id="advance-payment-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3><i class="fas fa-hand-holding-usd"></i> অগ্রিম পেমেন্ট এড করুন</h3>
+            <p>কাস্টমার: <span id="advance-customer-name"></span></p>
+            
+            <form id="advance-payment-form">
+                <input type="hidden" id="advance-customer-id">
+                
+                <label for="advance-amount">টাকার পরিমাণ (৳): <span style="color: red;">*</span></label>
+                <input type="number" id="advance-amount" step="0.01" min="1" required placeholder="0.00">
+                
+                <label for="advance-payment-method" style="margin-top: 15px;">পেমেন্ট মাধ্যম: <span style="color: red;">*</span></label>
+                <select id="advance-payment-method" required>
+                    <option value="cash">নগদ (Cash Ledger)</option>
+                    <option value="bank">ব্যাংক</option>
+                </select>
+                
+                <div id="advance-bank-select-container" style="display:none; margin-top: 15px;">
+                    <label for="advance-bank-select">ব্যাংক নির্বাচন করুন:</label>
+                    <select id="advance-bank-select"></select>
+                </div>
+                
+                <label for="advance-date" style="margin-top: 15px;">তারিখ: <span style="color: red;">*</span></label>
+                <input type="date" id="advance-date" required>
+                
+                <label for="advance-note" style="margin-top: 15px;">নোট (ঐচ্ছিক):</label>
+                <input type="text" id="advance-note" placeholder="কোনো মন্তব্য...">
+                
+                <button type="submit" class="primary-btn" style="margin-top: 20px;">
+                    <i class="fas fa-save"></i> অগ্রিম জমা দিন
+                </button>
+                <button type="button" class="cancel-btn close-button">
+                    <i class="fas fa-times"></i> বাতিল
+                </button>
+            </form>
+        </div>
+    </div>
+    
     <!-- Supplier Due Payment Modal -->
     <div id="pay-supplier-due-modal" class="modal" style="display:none;">
         <div class="modal-content">
@@ -6618,6 +6658,11 @@
                     shopSettings.ledgerCategories.expense.bank_withdrawal_expense = shopSettings.ledgerCategories.expense.bank_withdrawal_expense || 'ব্যাংক থেকে তুলে খরচ';
                     shopSettings.ledgerCategories.income.bank_to_cash_transfer = shopSettings.ledgerCategories.income.bank_to_cash_transfer || 'ব্যাংক থেকে Cash ট্রান্সফার';
                     
+                    // NEW: Ensure Advance Payment category exists
+                    if(!shopSettings.ledgerCategories.income.advance_payment) {
+                        shopSettings.ledgerCategories.income.advance_payment = 'অগ্রিম পেমেন্ট প্রাপ্তি';
+                    }
+                    
                     // Update Ledger names for clarity (if they were the old names)
                     shopSettings.ledgerCategories.income.sales_income = 'বিক্রয় থেকে আয় (Cash)';
                     shopSettings.ledgerCategories.income.due_collection = 'বাকি টাকা কালেকশন (Cash)';
@@ -6835,6 +6880,18 @@
         const processDuePaymentBtn = document.getElementById('process-due-payment-btn');
         const paymentReceiptSection = document.getElementById('payment-receipt-section');
         const printPaymentReceiptBtn = document.getElementById('print-payment-receipt-btn');
+        
+        // Advance Payment Elements
+        const advancePaymentModal = document.getElementById('advance-payment-modal');
+        const advancePaymentForm = document.getElementById('advance-payment-form');
+        const advanceCustomerId = document.getElementById('advance-customer-id');
+        const advanceCustomerName = document.getElementById('advance-customer-name');
+        const advanceAmount = document.getElementById('advance-amount');
+        const advancePaymentMethod = document.getElementById('advance-payment-method');
+        const advanceBankSelectContainer = document.getElementById('advance-bank-select-container');
+        const advanceBankSelect = document.getElementById('advance-bank-select');
+        const advanceDate = document.getElementById('advance-date');
+        const advanceNote = document.getElementById('advance-note');
 
         // NEW Manual Due Elements (Original, unedited in this list)
         const addManualDueForm = document.getElementById('add-manual-due-form');
@@ -10343,6 +10400,147 @@
                 currentDueForPayment = null;
             });
         });
+        
+        // Advance Payment Modal Event Handlers
+        // Toggle bank selection based on payment method
+        advancePaymentMethod.addEventListener('change', (e) => {
+            advanceBankSelectContainer.style.display = e.target.value === 'bank' ? 'block' : 'none';
+        });
+        
+        // Close modal handlers
+        document.querySelectorAll('#advance-payment-modal .close-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                advancePaymentModal.style.display = 'none';
+                advancePaymentForm.reset();
+            });
+        });
+        
+        // Form submission handler
+        advancePaymentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const customerId = advanceCustomerId.value;
+            const amount = parseFloat(advanceAmount.value);
+            const paymentMethod = advancePaymentMethod.value;
+            const bankId = advanceBankSelect.value;
+            const date = advanceDate.value;
+            const note = advanceNote.value.trim();
+            
+            // Validation
+            if (isNaN(amount) || amount <= 0) {
+                alert('বৈধ পরিমাণ প্রবেশ করান।');
+                return;
+            }
+            if (!date) {
+                alert('অনুগ্রহ করে একটি তারিখ নির্বাচন করুন।');
+                return;
+            }
+            
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                alert('কাস্টমার খুঁজে পাওয়া যায়নি!');
+                return;
+            }
+            
+            let selectedBank = null;
+            if (paymentMethod === 'bank') {
+                selectedBank = banks.find(b => b.id === bankId);
+                if (!selectedBank) {
+                    alert('অনুগ্রহ করে একটি ব্যাংক নির্বাচন করুন।');
+                    return;
+                }
+            }
+            
+            try {
+                // Create ledger entry
+                const ledgerEntry = {
+                    id: generateUniqueId('AP'),
+                    timestamp: new Date(date).toISOString(),
+                    type: 'income',
+                    category: 'advance_payment',
+                    description: `অগ্রিম পেমেন্ট${note ? ' - ' + note : ''}`,
+                    amount: amount,
+                    customerId: customerId,
+                    customerName: customer.name,
+                    paymentMethod: paymentMethod,
+                    bankName: paymentMethod === 'bank' ? selectedBank.name : null,
+                    bankId: paymentMethod === 'bank' ? bankId : null
+                };
+                
+                await db.add('ledgerEntries', ledgerEntry);
+                ledgerEntries.push(ledgerEntry);
+                
+                // If bank payment, create bank transaction
+                if (paymentMethod === 'bank' && selectedBank) {
+                    const bankTx = {
+                        id: generateUniqueId('BT'),
+                        bankId: bankId,
+                        bankName: selectedBank.name,
+                        date: date,
+                        type: 'credit',
+                        amount: amount,
+                        description: `অগ্রিম পেমেন্ট - ${customer.name}${note ? ' - ' + note : ''}`,
+                        category: 'advance_payment',
+                        customerId: customerId,
+                        customerName: customer.name,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    await db.add('bankTransactions', bankTx);
+                    bankTransactions.push(bankTx);
+                    
+                    // Update bank balance
+                    selectedBank.currentBalance += amount;
+                    await db.put('banks', selectedBank);
+                }
+                
+                // Update customer totals
+                customer.totalPaid = (customer.totalPaid || 0) + amount;
+                // Advance payment creates negative due (shop owes customer)
+                customer.currentDue = (customer.currentDue || 0) - amount;
+                await db.put('customers', customer);
+                
+                alert(`অগ্রিম পেমেন্ট সফলভাবে যোগ হয়েছে!\nপরিমাণ: ৳ ${amount.toLocaleString()}`);
+                
+                advancePaymentModal.style.display = 'none';
+                advancePaymentForm.reset();
+                
+                // Refresh all UI
+                updateAllUI();
+                
+            } catch (error) {
+                console.error('Error adding advance payment:', error);
+                alert('অগ্রিম পেমেন্ট যোগ করতে সমস্যা হয়েছে।');
+            }
+        });
+        
+        // Function to open advance payment modal
+        function openAdvancePaymentModal(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                alert('কাস্টমার খুঁজে পাওয়া যায়নি!');
+                return;
+            }
+            
+            advanceCustomerId.value = customerId;
+            advanceCustomerName.textContent = customer.name;
+            advanceAmount.value = '';
+            advancePaymentMethod.value = 'cash';
+            advanceBankSelectContainer.style.display = 'none';
+            advanceDate.value = new Date().toISOString().split('T')[0];
+            advanceNote.value = '';
+            
+            // Populate bank selector
+            advanceBankSelect.innerHTML = '<option value="" disabled selected>ব্যাংক নির্বাচন করুন</option>';
+            banks.forEach(bank => {
+                const option = document.createElement('option');
+                option.value = bank.id;
+                option.textContent = `${bank.name} (৳ ${bank.currentBalance.toLocaleString()})`;
+                advanceBankSelect.appendChild(option);
+            });
+            
+            advancePaymentModal.style.display = 'flex';
+        }
 
         paymentAmountInput.addEventListener('input', updateModalRemainingDue);
         dueDiscountInput.addEventListener('input', updateModalRemainingDue); // Discount change listener
@@ -10916,7 +11114,7 @@
 
             for (const key in categories) {
                 // Filter out system-generated categories that should not be manually added, and bank transfer
-                if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense', 'bank_to_cash_transfer'].includes(key)) {
+                if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense', 'bank_to_cash_transfer', 'advance_payment'].includes(key)) {
                     // Only allow Bank to Cash transfer entry if it's income and that specific category
                     if (key === 'bank_to_cash_transfer' && type === 'income') {
                         // Allow this one to be manually entered in ledger
@@ -10965,7 +11163,7 @@
             if (newCategoryName && newCategoryName.trim() !== '') {
                 const newCategoryKey = newCategoryName.trim().toLowerCase().replace(/\s+/g, '_');
                 // Use custom categories only (no system keys)
-                if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense', 'bank_to_cash_transfer'].includes(newCategoryKey)) {
+                if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense', 'bank_to_cash_transfer', 'advance_payment'].includes(newCategoryKey)) {
                     alert('এই নামটি সিস্টেমের জন্য সংরক্ষিত।');
                     return;
                 }
@@ -11051,7 +11249,7 @@
                     deleteBtn.addEventListener('click', () => deleteLedgerEntry(entry.id));
                     
                     // Prevent deleting auto-generated ledger entries/bank transfer entries
-                    if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_to_cash_transfer'].includes(entry.category)) {
+                    if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_to_cash_transfer', 'advance_payment'].includes(entry.category)) {
                         deleteBtn.disabled = true;
                     }
                     actionCell.appendChild(deleteBtn);
@@ -11091,7 +11289,7 @@
             }
             
             // Prevent manual adding of restricted categories (excluding bank_to_cash_transfer, which is handled below)
-            if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense'].includes(category)) {
+            if (['sales_income', 'due_collection', 'customer_refund', 'product_purchase', 'supplier_payment', 'opening_due_entry', 'manual_due_adjustment', 'bank_withdrawal_expense', 'advance_payment'].includes(category)) {
                 alert('এই ক্যাটাগরিটি ম্যানুয়ালি যোগ করা যায় না।');
                 return;
             }
@@ -12954,11 +13152,31 @@
                 row.insertCell(3).textContent = `৳ ${(customer.totalPurchased || 0).toLocaleString()}`;
                 row.insertCell(4).textContent = `৳ ${(customer.totalPaid || 0).toLocaleString()}`;
                 const dueCell = row.insertCell(5);
-                dueCell.textContent = `৳ ${(customer.currentDue || 0).toLocaleString()}`;
-                dueCell.style.color = (customer.currentDue || 0) > 0 ? '#dc3545' : 'green';
+                const currentDue = customer.currentDue || 0;
+                
+                if (currentDue < 0) {
+                    // Customer has advance payment (shop owes customer)
+                    dueCell.innerHTML = `<span style="color: #10b981;">-৳ ${Math.abs(currentDue).toLocaleString()}</span><br>
+                                         <small style="color: #8b5cf6; font-size: 11px;">(অগ্রিম)</small>`;
+                } else if (currentDue > 0) {
+                    dueCell.textContent = `৳ ${currentDue.toLocaleString()}`;
+                    dueCell.style.color = '#dc3545';
+                } else {
+                    dueCell.textContent = '৳ 0';
+                    dueCell.style.color = 'green';
+                }
 
                 const actionCell = row.insertCell(6);
                 actionCell.className = 'table-action-buttons';
+                
+                // Advance Payment Button
+                const advanceBtn = document.createElement('button');
+                advanceBtn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> অগ্রিম এড';
+                advanceBtn.className = 'primary-btn';
+                advanceBtn.style.background = 'linear-gradient(135deg, #8b5cf6, #7c3aed)';
+                advanceBtn.dataset.action = 'add-advance-payment';
+                advanceBtn.dataset.customerId = customer.id;
+                actionCell.appendChild(advanceBtn);
                 
                 const ledgerBtn = document.createElement('button');
                 ledgerBtn.innerHTML = '<i class="fas fa-book"></i> লেজার দেখুন';
@@ -13025,6 +13243,9 @@
                     const customerId = btn.dataset.customerId;
                     
                     switch(action) {
+                        case 'add-advance-payment':
+                            openAdvancePaymentModal(customerId);
+                            break;
                         case 'show-customer-ledger':
                             showCustomerLedger(customerId);
                             break;
@@ -14917,7 +15138,21 @@
             document.getElementById('modal-ledger-customer-name').textContent = currentViewingCustomer.name;
             document.getElementById('summary-total-customer-purchased').textContent = `৳ ${(currentViewingCustomer.totalPurchased || 0).toLocaleString()}`;
             document.getElementById('summary-total-customer-paid').textContent = `৳ ${(currentViewingCustomer.totalPaid || 0).toLocaleString()}`;
-            document.getElementById('summary-current-customer-due').textContent = `৳ ${(currentViewingCustomer.currentDue || 0).toLocaleString()}`;
+            
+            // Calculate advance payment total
+            const customerAdvancePayments = ledgerEntries
+                .filter(e => e.customerId === customerId && e.category === 'advance_payment')
+                .reduce((sum, e) => sum + (e.amount || 0), 0);
+            
+            // Show advance payment info if exists
+            if (customerAdvancePayments > 0) {
+                document.getElementById('summary-current-customer-due').innerHTML = 
+                    `<span style="color: #10b981;">৳ ${Math.abs(currentViewingCustomer.currentDue || 0).toLocaleString()}</span> 
+                     <small style="color: #8b5cf6; display: block;">(অগ্রিম জমা: ৳ ${customerAdvancePayments.toLocaleString()})</small>`;
+            } else {
+                document.getElementById('summary-current-customer-due').textContent = 
+                    `৳ ${(currentViewingCustomer.currentDue || 0).toLocaleString()}`;
+            }
 
             document.getElementById('customer-ledger-from-date').value = '';
             document.getElementById('customer-ledger-to-date').value = '';
@@ -14965,8 +15200,14 @@
             const ledgerPayments = ledgerEntries.filter(e => e.customerId === customerId && (e.category === 'due_collection' || e.category === 'manual_due_adjustment') && filterByDate(e));
             // Filter bank transactions for customer payments (due collection, sales, adjustment)
             const bankPayments = bankTransactions.filter(t => t.customerName === currentViewingCustomer.name && t.type === 'credit' && filterByDate(t));
+            // Filter advance payments from ledger
+            const advancePayments = ledgerEntries.filter(e => 
+                e.customerId === customerId && 
+                e.category === 'advance_payment' && 
+                filterByDate(e)
+            );
             
-            const allPayments = [...ledgerPayments, ...bankPayments].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            const allPayments = [...ledgerPayments, ...bankPayments, ...advancePayments].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
              if(allPayments.length > 0) {
                 paymentsBody.innerHTML = '';
@@ -14977,7 +15218,18 @@
                     const isBankTransaction = item.hasOwnProperty('bankId') || item.bankName;
                     
                     let rowHtml = '';
-                    if (item.type === 'income' || item.type === 'credit') {
+                    
+                    // Handle advance payment display
+                    if (item.category === 'advance_payment') {
+                        totalPayments += amount;
+                        rowHtml = `<tr style="background: rgba(139, 92, 246, 0.1);">
+                            <td>${moment(item.timestamp).format('L')}</td>
+                            <td>${source}</td>
+                            <td><i class="fas fa-hand-holding-usd" style="color: #8b5cf6;"></i> অগ্রিম পেমেন্ট${item.description ? ' - ' + item.description.replace('অগ্রিম পেমেন্ট', '') : ''}</td>
+                            <td>৳ ${amount.toLocaleString()}</td>
+                            <td>-</td>
+                        </tr>`;
+                    } else if (item.type === 'income' || item.type === 'credit') {
                          totalPayments += amount;
                          rowHtml = `<tr><td>${moment(item.timestamp).format('L')}</td><td>${source}</td><td>${item.description || 'পেমেন্ট'}</td><td>৳ ${amount.toLocaleString()}</td>`;
                     } else if (item.type === 'expense') { // Negative Adjustment
